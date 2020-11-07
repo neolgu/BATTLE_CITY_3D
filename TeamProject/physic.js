@@ -120,3 +120,17 @@ function collisionTest(center, shape)
   }
   return result;
 }
+//추후에는 collision object를 반환하도록 변형.
+function collision2D(center, shape)
+{
+  var result = false;
+  for(i=0; i<walls.length; i++)
+  {
+    //[width, width]는 벽돌의 크기가 제각기 다를 때 변형
+    if(collisionRect(walls[i],[width, width],center,shape))
+    {
+      result=true;
+    }
+  }
+  return result;
+}
