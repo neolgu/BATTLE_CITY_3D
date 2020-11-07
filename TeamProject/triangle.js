@@ -15,11 +15,14 @@ var direction_x = 0;
 var direction_y = 0;
 var x_dial=0;
 var axis = 0;
+var userDefine=false;
 //상하좌우
 var can_move_direction = vec4(1,1,1,1);
 var theta = [ 0, 0, 0 ];
 //벽들(위치)을 저장하는 배열(vector 형태/ 중심값을 저장하고, width를 이용해 충돌판정.)
 var walls =[];
+//총알들을 저장하는 배열. 어차피 객체들이 정의 완료될 때 객체배열로 합쳐질 것이다.
+var bullet_list =[];
 //벽들의 shape를 저장하는 배열(어차피 형태가 같아서 의미 없다.)
 var shapes =[];
 var thetaLoc;
@@ -82,7 +85,7 @@ window.onload = function init()
 
     x_pos=-0.75;
     y_pos=-0.75;
-
+    userDefine=true;
     setInterval(frameWork, 10);
 };
 //사살상 main역할
@@ -91,8 +94,17 @@ function frameWork()
   gl.clear(gl.COLOR_BUFFER_BIT);
   //drawRect([1, 0, 0, 1], [0.5, 0.5, 0, 0], width, false);
   //drawRect([1, 0, 0, 1], [-0.5, -0.5, 0, 0], width, false);
+
   mapGenerator(map1);
   drawRect([0, 1, 0, 1], [0, 0, 0, 0], tankSize, true);
+  if(bullet_list.length>5)
+    bullet_list.shift();
+  for(i=0;i<bullet_list.length;i++)
+  {
+    bullet_list[i].calcNewPos();
+    bullet_list[i].rendering();
+    //collision 발생 시 splice이용, 제거 일단은 pop으로 제거한다.
+  }
 }
 
 
