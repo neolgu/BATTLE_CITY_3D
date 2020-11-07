@@ -35,6 +35,21 @@ void main()
 ID: 201635806 Name: 김정민<br>
 <canvas id="gl-canvas" width="512" height="512">
 Oops! it has Error!
+
+<!-- a star test -->
+<script type='text/javascript' src='astar.js'></script>
+<script type='text/javascript'>
+var graph = new Graph([
+		[1,1,1,1],
+		[0,1,1,0],
+		[0,0,1,1]
+]);
+var start = graph.grid[0][0];
+var end = graph.grid[1][2];
+var result = astar.search(graph, start, end);
+// console.log(result)
+</script>
+<!---------------->
 </canvas>
 </body>
 </heml>
