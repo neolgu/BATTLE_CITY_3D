@@ -39,8 +39,8 @@ function input(event){
       direction_y=-1;
       break;
     //spacebar
-    case 32:
-      if(userDefine)
+    case 32://setTimeout이용.
+      if(userDefine)//그리고 유저가 발사할 수 있는 상황일 때 --> 이건 유저 함수에서
       {
         var b = new Bullet();
         var direction = vec2(1, 0);//임시 direction

@@ -110,27 +110,30 @@ function collisionObject(object1, object2){
 function collisionTest(center, shape)
 {
   var result = false;
-  for(i=0; i<walls.length; i++)
+  for(i=0; i<wall_list.length; i++)
   {
     //[width, width]는 벽돌의 크기가 제각기 다를 때 변형
-    if(collisionRect(walls[i],[width, width],[x_pos, y_pos],[tankSize, tankSize]))
+    if(collisionRect(wall_list[i].center,wall_list[i].shape,[x_pos, y_pos],[tankSize, tankSize]))
     {
       result=true;
     }
   }
   return result;
 }
+//벽과의 충돌을 감지, 충돌 시 벽의 index를 반환.
+//벽의 index는 프레임마다 refresh...
 //추후에는 collision object를 반환하도록 변형.
 function collision2D(center, shape)
 {
-  var result = false;
-  for(i=0; i<walls.length; i++)
+  var result = -1;
+  for(i=0; i<wall_list.length; i++)
   {
     //[width, width]는 벽돌의 크기가 제각기 다를 때 변형
-    if(collisionRect(walls[i],[width, width],center,shape))
+    if(collisionRect(wall_list[i].center,wall_list[i].shape,center,shape))
     {
-      result=true;
+      result=i;
     }
   }
+  console.log(result);
   return result;
 }
