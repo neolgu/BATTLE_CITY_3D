@@ -21,6 +21,7 @@ var can_move_direction = vec4(1,1,1,1);
 var theta = [ 0, 0, 0 ];
 //벽들(위치)을 저장하는 배열(vector 형태/ 중심값을 저장하고, width를 이용해 충돌판정.)
 var walls =[];
+var wall_list=[];
 //총알들을 저장하는 배열. 어차피 객체들이 정의 완료될 때 객체배열로 합쳐질 것이다.
 var bullet_list =[];
 //벽들의 shape를 저장하는 배열(어차피 형태가 같아서 의미 없다.)
@@ -77,7 +78,7 @@ window.onload = function init()
 
     vertexBuffer = gl.createBuffer();
     colorBuffer = gl.createBuffer();
-
+    mapDefine(map1);
 
     //event listeners for buttons
     window.addEventListener('keydown',input);
@@ -95,16 +96,24 @@ function frameWork()
   //drawRect([1, 0, 0, 1], [0.5, 0.5, 0, 0], width, false);
   //drawRect([1, 0, 0, 1], [-0.5, -0.5, 0, 0], width, false);
 
-  mapGenerator(map1);
-  drawRect([0, 1, 0, 1], [0, 0, 0, 0], tankSize, true);
+  //mapGenerator(map1);
+
   if(bullet_list.length>5)
     bullet_list.shift();
-  for(i=0;i<bullet_list.length;i++)
+  for(t=0;t<bullet_list.length;t++)
   {
-    bullet_list[i].calcNewPos();
-    bullet_list[i].rendering();
+    bullet_list[t].calcNewPos();
+
+    result = collision2D(bullet_list[t].center, bullet_list[t].shape);
+    bullet_list[t].rendering();
     //collision 발생 시 splice이용, 제거 일단은 pop으로 제거한다.
   }
+  for(i=0;i<wall_list.length;i++)
+  {
+    wall_list[i].setIndex(i);
+    wall_list[i].rendering();
+  }
+  drawRect([0, 1, 0, 1], [0, 0, 0, 0], tankSize, true);
 }
 
 
@@ -194,6 +203,30 @@ function mapGenerator(map)
       {
         walls.push([currentX, currentY]);
         drawRect([1, 0, 0, 1], [currentX, currentY, 0, 0], width, false);
+      }
+    }
+  }
+}
+
+//map에서 block code는 3
+function mapDefine(map)
+{
+  var axis_num=Math.sqrt(map.length);
+  var w = 2/axis_num;
+  x = -1+(w/2);//initial_coord
+  y = 1-w/2;
+  for(i=0;i<axis_num;i++)
+  {
+    var currentY= y-(i*w);
+    for(j=0;j<axis_num;j++)
+    {
+      var currentX=x+(j*w);
+      //when wall exist...
+      if(map[(i*axis_num)+j]==3)
+      {
+        var wall_instance = new Wall();
+        wall_instance.constructor([currentX, currentY],[width, width],[j, i]);
+        wall_list.push(wall_instance);
       }
     }
   }

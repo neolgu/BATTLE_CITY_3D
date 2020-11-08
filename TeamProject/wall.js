@@ -1,59 +1,44 @@
-function testClass()
-{
-  this.name="name";
-  this.functionTest = printTest;
-}
 
-function printTest(param)
-{
-  alert(param)
-}
-
-function Bullet()
+function Wall()
 {
   this.tag="bullet";
+
   this.index=0;
-  this.x_pos=0;
-  this.y_pos=0;
-  this.center=[x_pos, y_pos];
-  this.shape=[tankSize*0.2,tankSize*0.2];
-  this.team= true;
+
+  this.x_pos = 0;
+  this.y_pos = 0;
+  this.coord =[0, 0];
+  this.center = [x_pos, y_pos];
+  this.shape = [width,width];
+  this.scale =0;
   //normalized vector
-  this.direction = vec2(1, 0);
-  this.velocity = 0.02;
   this.vertex=[
-      vec2(-0.1, 0.1),
-      vec2(-0.1, -0.1),
-      vec2(0.1, -0.1),
-      vec2(0.1, 0.1)
+      vec2(-0.5, 0.5),
+      vec2(-0.5, -0.5),
+      vec2(0.5, -0.5),
+      vec2(0.5, 0.5)
     ];
-  this.color = [0, 0, 1, 1];
+  this.color = [1, 0, 0, 1];
   //initialize
-  this.shoot =function(position, direction)
+  this.constructor =function(position, scale, coord)
   {
-    this.direction=direction;
+    this.shape[0] = scale[0];
+    this.shape[1] = scale[1];
     this.x_pos = position[0];
     this.y_pos = position[1];
+    this.coord=coord;
     this.center =position;
   }
   this.setIndex=function(index)
   {
     this.index=index;
   }
-  //calculate new Position
-  this.calcNewPos = function()
-  {
-    this.x_pos += this.direction[0]*this.velocity;
-    this.y_pos += this.direction[1]*this.velocity;
-    this.center = [this.x_pos, this.y_pos];
-  }
   this.collisionCheck=function()
   {
-    var c = this.center.slice();
-    var s = this.shape.slice();
-    var collider=collision2D(c, s);
-    return collider;
+    collision2D(this.center, this.shape);
   }
+  //모든 Object에게 공통적으로 존재하는 function. 자신의 vertex에 맞게, 자신의 color에 맞게
+  //rendering을 수행한다. 호출은 triangle.js(main)에서 진행된다.
   this.rendering = function()
   {
 
@@ -79,10 +64,13 @@ function Bullet()
     //set mat
     ctm = mat4();
     ctm = mult(ctm, translate(this.center[0], this.center[1], 0));
+    ctm = mult(ctm, scalem(this.shape[0], this.shape[1], 1));
     var uMatrix = gl.getUniformLocation(program, "uMatrix");
     gl.uniformMatrix4fv(uMatrix, false, flatten(ctm));
     renderRect();
   }
-
+  this.free = function()
+  {
+    wall_list.splice(this.index);
+  }
 }
-
