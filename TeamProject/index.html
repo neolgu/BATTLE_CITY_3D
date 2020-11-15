@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+    <title>Battle city 3d ver</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body>
+    <script type="text/javascript" src="app.js"></script>
+    <script type="text/javascript" src="UI_script/UI.js"></script>
+
+    <div id="canvasdiv" style="position: relative; width:960px; height:720px;">
+        <canvas id="gl-canvas" style="z-index: 1;
+            position:absolute; left:10px; top:10px;" width="700" height="700">
+            GL CANVAS
+        </canvas>
+
+        <canvas id="minimap-canvas" style="z-index: 2;
+            position:absolute; left:735px; top:510px;" width="200" height="200">
+            MINIMAP CANVAS
+        </canvas>
+
+        <canvas id="ui-canvas" style="z-index: 3;
+            position:absolute; left:0px; top:0px;" width="960" height="720">
+            UI CANVAS
+        </canvas>
+    </div>
+
+    <button></button>
+</body>
+
+</html>
