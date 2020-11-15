@@ -132,8 +132,71 @@ function collision2D(center, shape)
     if(collisionRect(wall_list[i].center,wall_list[i].shape,center,shape))
     {
       result=i;
+      break;
     }
   }
-  console.log(result);
+  return result;
+}
+//거리 체크
+function getDistance(v1, v2)
+{
+  x1 = v1[0];
+  y1 = v1[1];
+  x2 = v2[0];
+  y2 = v2[1];
+  dis = Math.pow(x1- x2, 2) + Math.pow(y1-y2, 2);
+  return Math.sqrt(dis);
+}
+
+//단순화 된 collision 체크.
+//두개의 객체가 완벽히 정사각형일 때만 동작한다.
+//일단은 벽과의 충돌체크.
+function collision2D_simple(center, r)
+{
+  var result = -1;
+  for(i=0; i<wall_list.length; i++)
+  {
+      var standard = (r/2) + (wall_list[i].shape[0]/2)
+      if(getDistance(center, wall_list[i].center)<standard)
+      {
+        result=i;
+        break;
+      }
+  }
+  return result;
+}
+
+function collision2D_enemy(obj)
+{
+  result = -1;
+  if(obj.tag=="player")
+  {
+    for(var u_i =0; u_i<enemy_list.length;u_i++)
+    {
+      if(collisionRect(enemy_list[u_i].center, enemy_list[u_i].shape, obj,center, obj.shape))
+      {
+        //user Collision Code ==-100
+        result=-100;
+        break;
+      }
+    }
+  }
+  else if(obj.tag==="bullet")//입력이 총알일 때
+  {
+    for(var u_i =0; u_i<enemy_list.length;u_i++)
+    {
+      if(obj.team==true)
+      {
+        var standard = (obj.shape[0]/2) + (enemy_list[u_i].shape[0]/2);
+        if(getDistance(obj.center, enemy_list[u_i].center)<standard)
+        {
+          //user Collision Code ==-100
+          result=u_i;
+          console.log(result);
+          break;
+        }
+      }
+    }
+  }
   return result;
 }

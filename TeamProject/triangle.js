@@ -6,6 +6,9 @@ var numVertices  = 36;
 var xAxis = 0;
 var yAxis = 1;
 var zAxis = 2;
+//사용자 객체값...
+//x_pos와 y_pos는 추후 player의 객체 값으로 대체되어야 한다.
+var player;
 
 var x_pos=0;
 var y_pos=0;
@@ -26,6 +29,10 @@ var wall_list=[];
 var bullet_list =[];
 //벽들의 shape를 저장하는 배열(어차피 형태가 같아서 의미 없다.)
 var shapes =[];
+//적들을 저장하는 배열
+var enemy_list=[];
+
+var garbage_list=[];
 var thetaLoc;
 var uMatrix;
 
@@ -33,13 +40,15 @@ var uMatrix;
 var userPosition = [0, 0, 0];
 var userMoving = false;
 var maximumEnemy = 30;
+//dep
+var obj_indexer = 0;
 //오류 방지를 위한 파트
 var c_iter=1;
 //1=user, 2=enemy, 3=wall, 4=commandCentor
 var map1 = [
            0, 0, 0, 0, 0,
-           3, 0, 0, 0, 0,
-           3, 0, 3, 0, 3,
+           3, 0, 0, 2, 0,
+           3, 0, 3, 3, 3,
            0, 0, 3, 0, 3,
            0, 0, 3, 0, 0];
 
@@ -56,38 +65,38 @@ var mapColorBuffer;
 
 window.onload = function init()
 {
-    var canvas = document.getElementById( "gl-canvas" );
-    gl = WebGLUtils.setupWebGL( canvas );
-    if ( !gl ) { alert( "WebGL isn't available" ); }
+  var canvas = document.getElementById( "gl-canvas" );
+  gl = WebGLUtils.setupWebGL( canvas );
+  if ( !gl ) { alert( "WebGL isn't available" ); }
 
-    var vertices =  new Float32Array([0, 0.5,
-                    -0.5, -0.5,
-                    0.5, -0.5]);
+  var vertices =  new Float32Array([0, 0.5,
+                  -0.5, -0.5,
+                  0.5, -0.5]);
 
-    var colors = [ vec4(1.0, 0.0, 0.0, 1.0),
-                 vec4(0.0, 1.0, 0.0, 1.0),
-                 vec4(0.0, 0.0, 1.0, 1.0)];
+  var colors = [ vec4(1.0, 0.0, 0.0, 1.0),
+                vec4(0.0, 1.0, 0.0, 1.0),
+                vec4(0.0, 0.0, 1.0, 1.0)];
 
-    gl.viewport( 0, 0, canvas.width, canvas.height );
-    gl.clearColor( 0.0, 0.0, 0.0, 1.0 );
-    //var classTest = new testClass();
-    //classTest.functionTest("hello");
+  gl.viewport( 0, 0, canvas.width, canvas.height );
+  gl.clearColor( 0.0, 0.0, 0.0, 1.0 );
+  //var classTest = new testClass();
+  //classTest.functionTest("hello");
 
-    program = initShaders( gl, "vertex-shader", "fragment-shader" );
-    gl.useProgram( program );
+  program = initShaders( gl, "vertex-shader", "fragment-shader" );
+  gl.useProgram( program );
 
-    vertexBuffer = gl.createBuffer();
-    colorBuffer = gl.createBuffer();
-    mapDefine(map1);
+  vertexBuffer = gl.createBuffer();
+  colorBuffer = gl.createBuffer();
+  mapDefine(map1);
 
-    //event listeners for buttons
-    window.addEventListener('keydown',input);
-    window.addEventListener('keyup',keyupEvent);
-
-    x_pos=-0.75;
-    y_pos=-0.75;
-    userDefine=true;
-    setInterval(frameWork, 10);
+  //event listeners for buttons
+  window.addEventListener('keydown',input);
+  window.addEventListener('keyup',keyupEvent);
+  player = new Player();
+  x_pos=-0.75;
+  y_pos=-0.75;
+  userDefine=true;
+  setInterval(frameWork, 10);
 };
 //사살상 main역할
 function frameWork()
@@ -102,24 +111,69 @@ function frameWork()
     bullet_list.shift();
   for(t=0;t<bullet_list.length;t++)
   {
+    //bullet이 frame에서 수행해야 할 작업.
+    //이건 bullet에 함수화 하셈.
+    var obj = -1;
     bullet_list[t].calcNewPos();
-
-    result = collision2D(bullet_list[t].center, bullet_list[t].shape);
+    result = bullet_list[t].collisionCheck_tank(t);
+    //if(!bullet_list[t].collide)//충돌한 적이 없을 때...
+    //  result = collision2D_simple(bullet_list[t].center, bullet_list[t].shape[0]);
+    if(result==-1)
+      result = bullet_list[t].collisionCheck(t);
+    if(result==9999)//잠시 안쓰도록
+    {
+      bullet_list[t].free(t);
+      //wall_list[result].free(result);//마음에 안드는데 방법이 없음
+      break;
+    }
     bullet_list[t].rendering();
     //collision 발생 시 splice이용, 제거 일단은 pop으로 제거한다.
   }
   for(i=0;i<wall_list.length;i++)
   {
-    wall_list[i].setIndex(i);
+    //wall이 frame에서 수행해야 할 작업.
+    //이건 wall에 함수화 하셈
     wall_list[i].rendering();
   }
+  for(e_i=0;e_i<enemy_list.length;e_i++)
+  {
+    enemy_list[e_i].rendering();
+  }
+  //garbage_list에 있는 객체들 전부 제거
+  garbage_list.sort(function(a, b){
+    a.idx>b.idx?-1:a.idx<b.idx?1:0;
+  });
+  for(var g=0; g<garbage_list.length;g++)
+  {
+    remove_object(garbage_list[g]);
+  }
+  garbage_list.length=0;//initialize..
+  //userRendering...
   drawRect([0, 1, 0, 1], [0, 0, 0, 0], tankSize, true);
+}
+function remove_object(target)
+{
+  if(target.tag==3)
+  {
+    wall_list[target.idx].free(target.idx);
+  }
+  else if(target.tag==4)
+  {
+    bullet_list[target.idx].free(target.idx); 
+  }
+  else if(target.tag==2)
+  {
+    enemy_list[target.idx].free(target.idx);
+  }
+  else if(target.tag==1)
+  {
+    console.log("You Died");
+  }
 }
 
 
 
-
-function drawRect(color, position, scale, player){
+function drawRect(color, position, scale, isPlayer){
 
   gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
   gl.bufferData(gl.ARRAY_BUFFER, flatten(rectVertex), gl.STATIC_DRAW);
@@ -144,7 +198,7 @@ function drawRect(color, position, scale, player){
   ctm = mat4();
   ctm = mult(ctm, translate(position[0], position[1], 0));//moving함수에 따로
   collision=false;
-  if(player){
+  if(isPlayer){
     new_pos_x = speed*direction_x + x_pos;
     new_pos_y = speed*direction_y + y_pos;
 
@@ -186,6 +240,7 @@ function drawRect(color, position, scale, player){
 
 
 //map에서 block code는 3
+//지금은 안쓰이는 함수
 function mapGenerator(map)
 {
   var axis_num=Math.sqrt(map.length);
@@ -225,8 +280,16 @@ function mapDefine(map)
       if(map[(i*axis_num)+j]==3)
       {
         var wall_instance = new Wall();
+        wall_instance.index=obj_indexer++;
         wall_instance.constructor([currentX, currentY],[width, width],[j, i]);
         wall_list.push(wall_instance);
+      }
+      if(map[(i*axis_num)+j]==2)
+      {
+        var enemy_instance=new Enemy();
+        enemy_instance.index=obj_indexer++;
+        enemy_instance.constructor([currentX, currentY],[tankSize, tankSize],[j, i]);
+        enemy_list.push(enemy_instance);
       }
     }
   }

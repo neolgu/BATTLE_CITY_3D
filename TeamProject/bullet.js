@@ -17,6 +17,8 @@ function Bullet()
   this.y_pos=0;
   this.center=[x_pos, y_pos];
   this.shape=[tankSize*0.2,tankSize*0.2];
+  this.collide=false;
+  this.c_object = -1;
   this.team= true;
   //normalized vector
   this.direction = vec2(1, 0);
@@ -36,6 +38,7 @@ function Bullet()
     this.y_pos = position[1];
     this.center =position;
   }
+  //set unique index(global index)
   this.setIndex=function(index)
   {
     this.index=index;
@@ -47,16 +50,40 @@ function Bullet()
     this.y_pos += this.direction[1]*this.velocity;
     this.center = [this.x_pos, this.y_pos];
   }
-  this.collisionCheck=function()
+  this.collisionCheck=function(i_b)
   {
+    result=-1;
     var c = this.center.slice();
     var s = this.shape.slice();
-    var collider=collision2D(c, s);
+    if(!this.collide){
+      var collider=collision2D_simple(c, s[0]);//collision2D(c, s);
+      if(collider!=-1)
+      {
+        garbage_list.push({tag:3, idx:collider});//tag 3 is wall
+        garbage_list.push({tag:4, idx:i_b});//tag 4 is bullet
+        this.collide=true;
+      }
+    }
     return collider;
   }
+  //tank와 collision Check
+  this.collisionCheck_tank=function(i_b)
+  {
+    result = -1;
+    //다를때만 충돌체크
+    var collider = collision2D_enemy(this);
+    if(collider!=-1)
+    {
+      garbage_list.push({tag:2, idx:collider});//tag 3 is enemy
+      garbage_list.push({tag:4, idx:i_b});//tag 4 is bullet
+      this.collide=true;
+      console.log("is C!!");
+    }
+    return collider;
+  }
+  
   this.rendering = function()
   {
-
     gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
     gl.bufferData(gl.ARRAY_BUFFER, flatten(this.vertex), gl.STATIC_DRAW);
     //Set Attribute Position
@@ -84,5 +111,9 @@ function Bullet()
     renderRect();
   }
 
+  this.free = function(idx)
+  {
+    bullet_list.splice(idx, 1);
+  }
 }
 

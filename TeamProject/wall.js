@@ -1,7 +1,7 @@
 
 function Wall()
 {
-  this.tag="bullet";
+  this.tag="wall";
 
   this.index=0;
 
@@ -18,7 +18,7 @@ function Wall()
       vec2(0.5, -0.5),
       vec2(0.5, 0.5)
     ];
-  this.color = [1, 0, 0, 1];
+  this.color = [1, 0, 1, 1];
   //initialize
   this.constructor =function(position, scale, coord)
   {
@@ -29,6 +29,7 @@ function Wall()
     this.coord=coord;
     this.center =position;
   }
+  //set global index
   this.setIndex=function(index)
   {
     this.index=index;
@@ -69,8 +70,8 @@ function Wall()
     gl.uniformMatrix4fv(uMatrix, false, flatten(ctm));
     renderRect();
   }
-  this.free = function()
+  this.free = function(idx)
   {
-    wall_list.splice(this.index);
+    wall_list.splice(idx, 1);
   }
 }
