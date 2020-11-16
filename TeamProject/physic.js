@@ -132,9 +132,9 @@ function collision2D(center, shape)
     if(collisionRect(wall_list[i].center,wall_list[i].shape,center,shape))
     {
       result=i;
+      break;
     }
   }
-  console.log(result);
   return result;
 }
 //거리 체크
@@ -165,6 +165,7 @@ function collision2D_simple(center, r)
   }
   return result;
 }
+
 //obj는 ray를 쏘는 객체
 function check_ray(obj, target, sight)
 {

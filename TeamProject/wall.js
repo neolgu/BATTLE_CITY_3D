@@ -1,7 +1,7 @@
 
 function Wall()
 {
-  this.tag="bullet";
+  this.tag="wall";
 
   this.index=0;
 
@@ -29,6 +29,7 @@ function Wall()
     this.coord=coord;
     this.center =position;
   }
+  //set global index
   this.setIndex=function(index)
   {
     this.index=index;

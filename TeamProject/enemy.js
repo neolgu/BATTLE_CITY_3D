@@ -4,6 +4,7 @@ function Enemy(){
     this.x_pos=0;
     this.y_pos=0;
     this.shape=[0, 0];
+
     this.bulletDelay = 2000;
     this.speed = 0.01;
     this.center = [this.x_pos, this.y_pos];
@@ -14,6 +15,7 @@ function Enemy(){
 
     this.shoot_available = true;
     this.position= vec2(0, 0);
+
     this.team=false;
 
 
@@ -33,6 +35,7 @@ function Enemy(){
       this.coord=coord;
       this.center =position;
     }
+
     // if, direction에 user가 있을 때 shoot 우선
     // 50% move
     // 20% shoot

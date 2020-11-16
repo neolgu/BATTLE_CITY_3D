@@ -38,10 +38,12 @@ function Bullet()
     this.y_pos = position[1];
     this.center =position;
   }
+
   this.setVelocity=function(v)
   {
     this.velocity=v;
   }
+
   //set unique index(global index)
   this.setIndex=function(index)
   {
@@ -63,7 +65,6 @@ function Bullet()
       var collider=collision2D_simple(c, s[0]);//collision2D(c, s);
       if(collider!=-1)
       {
-        console.log(collider);
         garbage_list.push({tag:3, idx:collider});//tag 3 is wall
         garbage_list.push({tag:4, idx:i_b});//tag 4 is bullet
         this.collide=true;
