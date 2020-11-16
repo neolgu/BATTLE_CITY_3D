@@ -166,6 +166,26 @@ function collision2D_simple(center, r)
   return result;
 }
 
+//obj는 ray를 쏘는 객체
+function check_ray(obj, target, sight)
+{
+  var obj_direction = obj.direction.slice();
+  var center = [x_pos, y_pos];//target.center;//로 바꿔야함
+  var shape = [tankSize, tankSize];//target.shape;
+  var obj_vector = vec2(center[0]-obj.center[0], center[1]-obj.center[1]);//벡터 계산
+  var half = shape[0]/2;//반지름 계산
+  var vec_distance = getDistance(obj.center, center);
+  
+  obj_direction[0] = obj_direction[0]/vec_distance;
+  obj_direction[1] = obj_direction[1]/vec_distance; 
+  var theta = Math.acos((obj_direction[0]*obj_vector[0])+(obj_direction[1]*obj_vector[1]));
+  var direction_distance = Math.cos(theta)*vec_distance;
+  
+  if(Math.sin(theta)*vec_distance<half&&Math.abs(theta)<1.5&&direction_distance<sight)//cos로, direction과의 거리를 계산., 1.5는 90도
+    return true;
+  return false;
+}
+
 function collision2D_enemy(obj)
 {
   result = -1;

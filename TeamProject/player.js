@@ -6,9 +6,10 @@ function Player(){
   this.bulletDelay = 800;
   this.center = [this.x_pos, this.y_pos];
   this.position= vec2(0, 0);
+  this.shoot_available=true;
+  this.bulletDelay=800;
   this.team=true;
-  this.shoot_available = true;
-
+  
   this.vertex = [
       vec2(-0.5, 0.5),
       vec2(-0.5, -0.5),

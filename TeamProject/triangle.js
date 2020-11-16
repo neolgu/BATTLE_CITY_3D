@@ -46,7 +46,7 @@ var obj_indexer = 0;
 var c_iter=1;
 //1=user, 2=enemy, 3=wall, 4=commandCentor
 var map1 = [
-           0, 0, 0, 0, 0,
+           0, 0, 0, 2, 0,
            3, 0, 0, 2, 0,
            3, 0, 3, 3, 3,
            0, 0, 3, 0, 3,
@@ -137,6 +137,7 @@ function frameWork()
   }
   for(e_i=0;e_i<enemy_list.length;e_i++)
   {
+    enemy_list[e_i].ai_action();
     enemy_list[e_i].rendering();
   }
   //garbage_list에 있는 객체들 전부 제거

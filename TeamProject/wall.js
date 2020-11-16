@@ -72,6 +72,6 @@ function Wall()
   }
   this.free = function(idx)
   {
-    wall_list.splice(idx, 1);
+    wall_list.splice(idx,1);
   }
 }

@@ -4,16 +4,18 @@ function Enemy(){
     this.x_pos=0;
     this.y_pos=0;
     this.shape=[0, 0];
-    this.bulletDelay = 800;
+
+    this.bulletDelay = 2000;
     this.speed = 0.01;
     this.center = [this.x_pos, this.y_pos];
     this.coord=[0,0];
     this.shape = [tankSize,tankSize];
+    this.sight = 1.0;
     this.direction=vec2(0, -1);
 
     this.shoot_available = true;
     this.position= vec2(0, 0);
-    this.direction=vec2(0,0);
+
     this.team=false;
 
 
@@ -33,12 +35,27 @@ function Enemy(){
       this.coord=coord;
       this.center =position;
     }
-    this.move = function(direction){
 
+    // if, direction에 user가 있을 때 shoot 우선
+    // 50% move
+    // 20% shoot
+    // 30% rotate
+    this.ai_action = function(){
+      var ray=false;
+      if(userDefine)
+        ray = check_ray(this, player, this.sight);
+      if(ray)
+      {
+        this.shoot();
+      }
+      else{
+        var weight = Math.random()*100;
+      }
     }
     this.shoot = function(){
         var b = new Bullet();
         b.team=this.team;
+        b.setVelocity(0.015);
         if(this.shoot_available){
         //var direction = vec2(0, -1);//임시 direction
         b.shoot([this.x_pos, this.y_pos], this.direction);//direction은 추후 this.direction으로 대체
