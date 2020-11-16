@@ -67,17 +67,11 @@ class Start {
     }
 
     draw(ctx) {
-        ctx.beginPath();
-        ctx.font = "70px Arial";
-        ctx.strokeText("BATTLE CITY", 400, 360);
-
-        ctx.beginPath();
-        ctx.font = "30px Arial";
-        ctx.strokeText("Game Start", 550, 500);
-
-        ctx.beginPath();
-        ctx.font = "25px Arial";
-        ctx.fillText("Press Any key", 550, 550);
+        var img = new Image();
+        img.onload = function(){
+            ctx.drawImage(img, 0, 0);
+        }
+        img.src = "./UI/title.png";
     }
 
     keyFunc(key) {
@@ -96,9 +90,11 @@ class Stage {
     }
 
     draw(ctx) {
-        ctx.beginPath();
-        ctx.font = "70px Arial";
-        ctx.strokeText("Stage", 400, 360);
+        var img = new Image();
+        img.onload = function(){
+            ctx.drawImage(img, 0, 0);
+        }
+        img.src = "./UI/stage.png";
     }
 
     keyFunc(key) {
