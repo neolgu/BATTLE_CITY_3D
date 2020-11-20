@@ -4,6 +4,7 @@ function Enemy(){
     this.x_pos=0;
     this.y_pos=0;
     this.shape=[0, 0];
+
     this.bulletDelay = 2000;
     this.speed = 0.005;
     this.center = [this.x_pos, this.y_pos];
@@ -17,6 +18,7 @@ function Enemy(){
     this.r = 3.0;
     this.shoot_available = true;
     this.position= vec2(0, 0);
+
     this.team=false;
     this.sight_object=-1;
     this.moveable = true;
@@ -38,6 +40,7 @@ function Enemy(){
       this.coord=coord;
       this.center =position;
     }
+
     // if, direction에 user가 있을 때 shoot 우선
     // 80% move& rotate --> ray에서 obj가 있을 때 rotate
     // 20% shoot

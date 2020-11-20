@@ -38,10 +38,12 @@ function Bullet()
     this.y_pos = position[1];
     this.center =position;
   }
+
   this.setVelocity=function(v)
   {
     this.velocity=v;
   }
+
   //set unique index(global index)
   this.setIndex=function(index)
   {

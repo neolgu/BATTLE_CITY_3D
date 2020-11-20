@@ -29,6 +29,7 @@ function Wall()
     this.coord=coord;
     this.center =position;
   }
+  //set global index
   this.setIndex=function(index)
   {
     this.index=index;
