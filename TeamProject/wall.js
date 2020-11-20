@@ -1,14 +1,14 @@
 
 function Wall()
 {
-  this.tag="bullet";
+  this.tag="wall";
 
   this.index=0;
-
+  this.overwhelming = false;
   this.x_pos = 0;
   this.y_pos = 0;
   this.coord =[0, 0];
-  this.center = [x_pos, y_pos];
+  this.center = [0, 0];
   this.shape = [width,width];
   this.scale =0;
   //normalized vector
@@ -71,6 +71,9 @@ function Wall()
   }
   this.free = function(idx)
   {
-    wall_list.splice(idx,1);
+    if(obj_list!=-1)
+    {
+      //free하면서 일어나는 일들
+    }
   }
 }

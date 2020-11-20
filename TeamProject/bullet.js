@@ -15,7 +15,7 @@ function Bullet()
   this.index=0;
   this.x_pos=0;
   this.y_pos=0;
-  this.center=[x_pos, y_pos];
+  this.center=[0, 0];
   this.shape=[tankSize*0.2,tankSize*0.2];
   this.collide=false;
   this.c_object = -1;
@@ -63,7 +63,6 @@ function Bullet()
       var collider=collision2D_simple(c, s[0]);//collision2D(c, s);
       if(collider!=-1)
       {
-        console.log(collider);
         garbage_list.push({tag:3, idx:collider});//tag 3 is wall
         garbage_list.push({tag:4, idx:i_b});//tag 4 is bullet
         this.collide=true;
@@ -115,10 +114,17 @@ function Bullet()
     gl.uniformMatrix4fv(uMatrix, false, flatten(ctm));
     renderRect();
   }
-
+  this.frameWork = function()
+  {
+    this.rendering();
+    this.calcNewPos();
+  }
   this.free = function(idx)
   {
-    bullet_list.splice(idx, 1);
+    if(obj_list!=-1)
+    {
+      obj_list.bullet_list.splice(idx, 1);
+    }
   }
 }
 
