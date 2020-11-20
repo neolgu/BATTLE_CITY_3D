@@ -15,7 +15,7 @@ function Bullet()
   this.index=0;
   this.x_pos=0;
   this.y_pos=0;
-  this.center=[x_pos, y_pos];
+  this.center=[0, 0];
   this.shape=[tankSize*0.2,tankSize*0.2];
   this.collide=false;
   this.c_object = -1;
@@ -116,10 +116,17 @@ function Bullet()
     gl.uniformMatrix4fv(uMatrix, false, flatten(ctm));
     renderRect();
   }
-
+  this.frameWork = function()
+  {
+    this.rendering();
+    this.calcNewPos();
+  }
   this.free = function(idx)
   {
-    bullet_list.splice(idx, 1);
+    if(obj_list!=-1)
+    {
+      obj_list.bullet_list.splice(idx, 1);
+    }
   }
 }
 
