@@ -4,6 +4,7 @@ class Manager {
         //this.gmmgr = new GameUI();
         this.uimgr = new UIManager(uiCanvasId);
         //this.graphic = new Graphic();
+        this.minimap = new MiniMapManager(minimapCanvasId);
     }
 
     keyEvent(e) {
@@ -13,11 +14,20 @@ class Manager {
             if(1<= result && result <= 5){// game, n-stage 시작
                 //gmmgr.start n stage
                 console.log("Game start, " + result + "-stage.");
+
+                this.minimap.dataBind(gamedata);
+                this.minimap.execuse();
             }
         }
         //game.keyEvent(e);
     }
 }
+
+// MINIMAP TEST DATA
+var gamedata = {}
+gamedata.player = {};
+gamedata.player.x_pos = 0.5;
+gamedata.player.y_pos = 0.5;
 
 window.onload = () => {
     var manager = new Manager("ui-canvas", "gl-canvas", "minimap-canvas");
@@ -36,14 +46,13 @@ window.onload = () => {
     gl_ctx.font = "70px Arial";
     gl_ctx.fillText("GAME SCREEN", 100, 400);
 
-
-    mm = document.getElementById("minimap-canvas");
-    mm_ctx = mm.getContext("2d");
-
-    mm_ctx.beginPath();
-    mm_ctx.strokeRect(0, 0, mm.width, mm.height);
-    mm_ctx.beginPath();
-    mm_ctx.font = "20px Arial";
-    mm_ctx.fillText("Mini-Map", 30,100);
-
+    // minimap test key event
+    window.addEventListener('keydown', (e) => {
+        if(e.key == "l"){
+            gamedata.player.x_pos -= 0.1;
+        }
+        else if(e.key == "k"){
+            gamedata.player.y_pos -= 0.1;
+        }
+    });
 }
