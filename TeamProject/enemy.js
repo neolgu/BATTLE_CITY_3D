@@ -39,6 +39,8 @@ function Enemy(){
       this.y_pos = position[1];
       this.coord=coord;
       this.center =position;
+      this.predict_sight = this.shape[0];
+      this.sight = this.shape[0]*3;
     }
 
     // if, direction에 user가 있을 때 shoot 우선
@@ -46,7 +48,7 @@ function Enemy(){
     // 20% shoot
     this.ai_action = function(){
       var ray=false;
-      if(userDefine)
+      if(obj_list.player!=-1)
         ray = check_ray(this, obj_list.player, this.sight, this.shape[0]/2);
       if(ray)
       {
@@ -70,15 +72,30 @@ function Enemy(){
           }
           else if(weight<0.5)
           {
-            var n_post_x = (this.speed*this.direction[0]) + this.x_pos;
-            var n_post_y = (this.speed*this.direction[1]) + this.y_pos;
-            this.move([n_post_x, n_post_y]);
+            this.move();
+          }
+          else if(weight<0.6)
+          {
+            this.rot(-this.rot_dir);
+          }
+          else if(weight<0.7)
+          {
+            this.rot(this.rot_dir);
           }
         }
       }
     }
-    this.move = function(coord)
+    this.move = function()
     {
+      var n_post_x = (this.speed*this.direction[0]) + this.x_pos;
+      var n_post_y = (this.speed*this.direction[1]) + this.y_pos;
+      var coord = [n_post_x, n_post_y]
+      if(Math.abs(coord[0])>1 || Math.abs(coord[1])>1)
+      {
+
+        this.rot(this.rot_dir);
+        return 0;
+      }
       if(this.moveable)
       {
         this.center = coord;
@@ -89,6 +106,7 @@ function Enemy(){
         rot(this.rot_dir);
         var n_post_x = (this.speed*-this.direction[0]) + this.x_pos;
         var n_post_y = (this.speed*-this.direction[1]) + this.y_pos;
+        
         this.moveable=true;
       }
     }

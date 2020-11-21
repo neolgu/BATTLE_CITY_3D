@@ -1,5 +1,5 @@
 //center1, width1 ==> 대상1, center2, width2 ==>대상2(움직이는 물체)
-function collisionRect(center1, shape1, center2, shape2){
+function collisionRect(center1, shape1, center2, shape2, theta){
   //각 방향의 limit을 획득
   var result=false;
   // 움직이지 않는 대상(피)
@@ -50,7 +50,23 @@ function collisionRect(center1, shape1, center2, shape2){
     if(result)
   return result;
 }
+function rotate(point, center, theta)
+{
+  var c = center.slice();
+  var vector = [point[0]-c[0], point[1]-c[1]];
+  vector = vectorNormalization(vector);
+  var radian = Math.radians(theta);
+  var new_x = Math.cos(radian)*vector[0]-Math.sin(radian)*vector[1];
+  var new_y = Math.sin(radian)*vector[0]+Math.cos(radian)*vector[1];
+  return [new_x+c[0], new_y+c[1]];
+}
 
+function vectorNormalization(vector)
+{
+  var r = Math.sqrt((vector[0]*vector[0])+(vector[1]*vector[1]))
+  var result = [vector[0]/r, vector[1]/r];
+  return result;
+}
 //center1, width1 ==> 대상1, center2, width2 ==>대상2(움직이는 물체)
 //모든 object는 배열 형태의 center, shape를 갖는다. 이 둘은 길이가 2인 배열.
 function collisionObject(object1, object2){
@@ -136,6 +152,17 @@ function collision2D_simple(center, r)
   return result;
 }
 
+function CircleCollider(obj1, obj2)
+{
+  var center1= obj1.center;
+  var center2 = obj2.center;
+  
+  var standard = (obj1.shape[0]/2) + (obj2.shape[0]/2);
+  if(getDistance(center1, center2)<standard)
+    return true;
+  else return false;
+}
+
 //obj는 ray를 쏘는 객체
 function check_ray(obj, target, sight, wid)
 {
@@ -191,3 +218,7 @@ function collision2D_enemy(obj)
   }
   return result;
 }
+
+Math.radians = function(degrees) {
+  return degrees * Math.PI / 180;
+};

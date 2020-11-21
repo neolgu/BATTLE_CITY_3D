@@ -36,7 +36,6 @@ function GameManager(){
     {
       obj_list.initializer();
       var currentMap = this.map_list[idx];
-      console.log(currentMap);
       var currentEnemy_num = this.map_list[idx];
 
       var stage = new Stage();

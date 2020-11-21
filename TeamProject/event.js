@@ -28,23 +28,19 @@ function input(event) {//key down
   switch (event.keyCode) {
     case 37:
       obj_list.player.rot_dir = 1;
-      obj_list.player.move();
       //obj_list.player.direction_x=-1;
       break;
     case 38:
       obj_list.player.direction_y = 1;
       obj_list.player.moving = 1;
-      obj_list.player.move();
       break;
     case 39:
       obj_list.player.rot_dir = -1;
-      obj_list.player.move();
       //obj_list.player.direction_x=1;
       break;
     case 40:
       obj_list.player.moving = -1;
       obj_list.player.direction_y = -1;
-      obj_list.player.move();
       break;
     //spacebar
     case 32://setTimeout이용.

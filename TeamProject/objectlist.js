@@ -142,10 +142,11 @@ function ObjectList(){
     this.player_action = function()
     {
         var collider = false;
+        collider = false;
         for(var wall_index=0; wall_index<this.wall_list.length; wall_index++)
-        {
+        {   
             //[width, width]는 벽돌의 크기가 제각기 다를 때 변형
-            if(collisionRect(this.wall_list[wall_index].center,this.wall_list[wall_index].shape,[this.player.x_pos, this.player.y_pos],this.player.shape))
+            if(CircleCollider(this.player, this.wall_list[wall_index]))
             {
                 collider=true;
             }
@@ -153,11 +154,12 @@ function ObjectList(){
         for(var enemy_index=0; enemy_index<this.enemy_list.length; enemy_index++)
         {
             //[width, width]는 벽돌의 크기가 제각기 다를 때 변형
-            if(collisionRect(this.enemy_list[enemy_index].center,this.enemy_list[enemy_index].shape,[this.player.x_pos, this.player.y_pos],this.player.shape))
-            {
+            if(CircleCollider(this.player, this.enemy_list[enemy_index]))
+            {   
                 collider=true;
             }
         }
+        this.player.move(collider);
         return collider;
     }
 
@@ -173,6 +175,7 @@ function ObjectList(){
     {
         this.enemy_action();
         this.bullet_action();
+        this.player_action();
         this.garbage_list.reduce(function(acc, curr, index){
             acc.indexOf(curr)>-1? acc: acc.push(curr);
             return acc;

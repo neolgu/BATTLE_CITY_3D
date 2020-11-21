@@ -23,17 +23,18 @@ function Stage()
     {
       this.map = map.slice();
       this.enemy_num = enemy_num;
-      this.mapDefine();
+      
       
       this.width = 2/Math.sqrt(map.length);
       this.half = this.width/2;
       this.tankSize = this.width*0.7;
-
+      
       var player = new Player;
       player.constructor([-0.75, -0.75], [this.tankSize, this.tankSize], [0, 0]);
       player.rot(0);
       obj_list.player = player;
-      userDefine=true;
+      
+      this.mapDefine();
       setInterval(this.frameWork.bind(this), 10);
     }
     this.frameWork = function()

@@ -12,12 +12,15 @@ function Player(){
   this.bulletDelay=800;
   this.r = 1.0;
   this.team=true;
+  this.rotating = false;
   this.direction_x=0;
   this.direction_y=0;
   this.moving= 0;
+  
   this.direction_buffer = [0,0];
   this.theta = 0;
   this.direction = [0, 0];
+  
   this.vertex = new Float32Array([
       -0.5, 0.5,
       -0.5, -0.5,
@@ -37,6 +40,7 @@ function Player(){
 
   this.shoot = function()
   {
+    console.log("shoot");
     var b = new Bullet();
     b.team=this.team;
     if(this.shoot_available){
@@ -63,7 +67,7 @@ function Player(){
     this.direction[1] = Math.sin(rad);
   }
 
-  this.move = function()
+  this.move = function(collision)
   {
     if(this.rot_dir!=0)
     {
@@ -71,8 +75,8 @@ function Player(){
     }
     var new_pos_x = (this.speed*this.direction[0])*this.moving + this.x_pos;
     var new_pos_y = (this.speed*this.direction[1])*this.moving + this.y_pos;
-
-    var collision = obj_list.player_action();
+    if(Math.abs(new_pos_x)>1||Math.abs(new_pos_y)>1)
+      return 0;
     if(!collision)
     {
       this.x_pos = new_pos_x;//+=speed*direction_x;
@@ -82,16 +86,10 @@ function Player(){
     }
     else//충돌 발생
     {
-      if(this.direction_buffer!=[0,0])
-      {
-          this.x_pos-=this.speed*this.direction_buffer.x*(2)*this.moving; //손을 놓으면 direction이 0이 되어버린다.
-          this.y_pos-=this.speed*this.direction_buffer.y*(2)*this.moving;
-          this.direction_buffer=[0,0];
-      }
-      else
-      {
-        this.x_pos-=this.speed*this.direction_x*(2)*this.moving; //손을 놓으면 direction이 0이 되어버린다.
-        this.y_pos-=this.speed*this.direction_y*(2)*this.moving;
+      for(var times =0; times<5; times++){
+        this.x_pos-=this.speed*this.direction_buffer.x*this.moving; //손을 놓으면 direction이 0이 되어버린다.
+        this.y_pos-=this.speed*this.direction_buffer.y*this.moving;
+        this.center = [this.x_pos, this.y_pos];
       }
       this.direction_x=0;
       this.direction_y=0;
@@ -139,9 +137,4 @@ function Player(){
     renderRect();
   }
 }
-
-
-Math.radians = function(degrees) {
-  return degrees * Math.PI / 180;
-};
 
