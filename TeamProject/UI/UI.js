@@ -44,7 +44,7 @@ class UIManager {
                 ui = new Start(this.ctx);
                 break;
             case "Stage":
-                ui = new Stage(this.ctx);
+                ui = new StageUI(this.ctx);
                 break;
             case "Game":
                 ui = new GameUI(this.ctx);
@@ -84,7 +84,7 @@ class Start {
  * Start UI Class
  * 스테이지 고르는 화면
  */
-class Stage {
+class StageUI {
     constructor(ctx) {
         this.draw(ctx);
     }
@@ -130,6 +130,7 @@ class GameUI {
         this.numEnemy = null;
         this.hp = 2;
 
+        this.pause = false;
         this.animationFlag = false;
 
         this.drawbackground();
@@ -191,7 +192,6 @@ class GameUI {
     drawHP(){
         this.ctx.fillText("HP", 730, 150);
         this.ctx.drawImage(this.heart[this.hp], 710, 160);
-        console.log(this.heart[this.hp]);
     }
 
     keyFunc(key) {

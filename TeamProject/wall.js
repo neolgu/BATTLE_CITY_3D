@@ -9,7 +9,7 @@ function Wall()
   this.y_pos = 0;
   this.coord =[0, 0];
   this.center = [0, 0];
-  this.shape = [width,width];
+  this.shape = [];
   this.scale =0;
   //normalized vector
   this.vertex=new Float32Array([

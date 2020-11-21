@@ -36,14 +36,14 @@ class MiniMapManager {
         this.drawObj(this.mapdata.player.x_pos, this.mapdata.player.y_pos, "P");
 
         // // Enemy
-        // for (var i = 0; i < this.mapdata.enemy_list.length; i++) {
-        //     this.drawObj(this.mapdata.enemy_list[i].x_pos, this.mapdata.enemy_list[i], "E");
-        // }
+        for (var i = 0; i < this.mapdata.enemy_list.length; i++) {
+            this.drawObj(this.mapdata.enemy_list[i].x_pos, this.mapdata.enemy_list[i].y_pos, "E");
+        }
 
         // // Wall
-        // for (var i = 0; i < this.mapdata.wall_list.length; i++) {
-        //     this.drawObj(this.mapdata.wall_list[i].x_pos, this.mapdata.wall_list[i], "W");
-        // }
+        for (var i = 0; i < this.mapdata.wall_list.length; i++) {
+            this.drawObj(this.mapdata.wall_list[i].x_pos, this.mapdata.wall_list[i].y_pos, "W");
+        }
 
         if (this.animationFlag) {
             requestAnimationFrame(this.draw.bind(this));
@@ -63,7 +63,6 @@ class MiniMapManager {
 
     drawObj(x_pos, y_pos, mode) {
         var obj = this.coordTrans(x_pos, y_pos);
-        console.log(x_pos, y_pos);
 
         this.ctx.beginPath();
         switch (mode) {

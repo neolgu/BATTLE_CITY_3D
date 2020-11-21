@@ -16,7 +16,7 @@ function Bullet()
   this.x_pos=0;
   this.y_pos=0;
   this.center=[0, 0];
-  this.shape=[tankSize*0.2,tankSize*0.2];
+  this.shape=[0, 0];
   this.collide=false;
   this.c_object = -1;
   this.team= true;
@@ -31,11 +31,12 @@ function Bullet()
     ]);
   this.color = [0, 0, 1, 1];
   //initialize
-  this.shoot =function(position, direction)
+  this.shoot =function(position, direction, shape)
   {
     this.direction=direction;
     this.x_pos = position[0];
     this.y_pos = position[1];
+    this.shape = shape;
     this.center =position;
   }
 
@@ -117,7 +118,7 @@ function Bullet()
   }
   this.frameWork = function()
   {
-    this.rendering();
+    //this.rendering();
     this.calcNewPos();
   }
   this.free = function(idx)

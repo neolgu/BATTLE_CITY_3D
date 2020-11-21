@@ -3,7 +3,7 @@ function Player(){
   this.x_pos=0;
   this.y_pos=0;
   this.rot_dir =0;
-  this.shape=[tankSize, tankSize];
+  this.shape=[0, 0];
   this.bulletDelay = 0.5;
   this.speed = 0.008;
   this.center = [this.x_pos, this.y_pos];
@@ -25,13 +25,23 @@ function Player(){
       0.5, 0.5
     ]);
   this.color = [0, 1, 0, 1];
+  this.constructor =function(position, scale, coord)
+    {
+      this.shape[0] = scale[0];
+      this.shape[1] = scale[1];
+      this.x_pos = position[0];
+      this.y_pos = position[1];
+      this.coord=coord;
+      this.center =position;
+    }
+
   this.shoot = function()
   {
     var b = new Bullet();
     b.team=this.team;
     if(this.shoot_available){
       var direction = [this.direction[0], this.direction[1]];//임시 direction
-      b.shoot([this.x_pos, this.y_pos], direction);//x_pos와 y_pos는 추후 this.x_pos, this.y_pos로 대체/
+      b.shoot([this.x_pos, this.y_pos], direction, [this.shape[0]*0.2, this.shape[1]*0.2]);//x_pos와 y_pos는 추후 this.x_pos, this.y_pos로 대체/
       obj_list.bullet_list.push(b);
       this.shoot_available=false;
       setTimeout(this.available_bullet.bind(this), this.bulletDelay);
@@ -52,12 +62,47 @@ function Player(){
     this.direction[0] = Math.cos(rad);
     this.direction[1] = Math.sin(rad);
   }
-  this.rendering = function()
+
+  this.move = function()
   {
     if(this.rot_dir!=0)
     {
       this.rot(this.rot_dir);
     }
+    var new_pos_x = (this.speed*this.direction[0])*this.moving + this.x_pos;
+    var new_pos_y = (this.speed*this.direction[1])*this.moving + this.y_pos;
+
+    var collision = obj_list.player_action();
+    if(!collision)
+    {
+      this.x_pos = new_pos_x;//+=speed*direction_x;
+      this.center[0] = new_pos_x;
+      this.y_pos = new_pos_y;//+=speed*direction_y;
+      this.center[1] = new_pos_y;
+    }
+    else//충돌 발생
+    {
+      if(this.direction_buffer!=[0,0])
+      {
+          this.x_pos-=this.speed*this.direction_buffer.x*(2)*this.moving; //손을 놓으면 direction이 0이 되어버린다.
+          this.y_pos-=this.speed*this.direction_buffer.y*(2)*this.moving;
+          this.direction_buffer=[0,0];
+      }
+      else
+      {
+        this.x_pos-=this.speed*this.direction_x*(2)*this.moving; //손을 놓으면 direction이 0이 되어버린다.
+        this.y_pos-=this.speed*this.direction_y*(2)*this.moving;
+      }
+      this.direction_x=0;
+      this.direction_y=0;
+    }
+    this.direction_buffer.x=this.direction[0];
+    this.direction_buffer.y=this.direction[1];
+  }
+
+  this.rendering = function()
+  {
+    
 
     gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
     gl.bufferData(gl.ARRAY_BUFFER, flatten(this.vertex), gl.STATIC_DRAW);
@@ -84,38 +129,6 @@ function Player(){
     ctm = mult(ctm, translate(this.position[0], this.position[1], 0));
     //회전이 들어가야 함
     //-----------------------------------------------
-    var new_pos_x = (this.speed*this.direction[0])*this.moving + this.x_pos;
-    var new_pos_y = (this.speed*this.direction[1])*this.moving + this.y_pos;
-
-    var collision = obj_list.player_action();
-    if(!collision)
-    {
-      this.x_pos = new_pos_x;//+=speed*direction_x;
-      this.center[0] = new_pos_x;
-      this.y_pos = new_pos_y;//+=speed*direction_y;
-      this.center[1] = new_pos_y;
-    }
-    else//충돌 발생
-    {
-      if(this.direction_buffer!=[0,0])
-      {
-          this.x_pos-=this.speed*this.direction_buffer.x*(2)*this.moving; //손을 놓으면 direction이 0이 되어버린다.
-          this.y_pos-=this.speed*this.direction_buffer.y*(2)*this.moving;
-          this.direction_buffer=[0,0];
-      }
-      else
-      {
-        this.x_pos-=this.speed*this.direction_x*(2)*this.moving; //손을 놓으면 direction이 0이 되어버린다.
-        this.y_pos-=this.speed*this.direction_y*(2)*this.moving;
-      }
-
-
-      this.direction_x=0;
-      this.direction_y=0;
-    }
-    this.direction_buffer.x=this.direction[0];
-    this.direction_buffer.y=this.direction[1];
-
     ctm = mult(ctm, translate(this.x_pos, this.y_pos, 0));//moving함수에 따로
 
     ctm = mult(ctm, rotate(this.theta, 0, 0, 1));

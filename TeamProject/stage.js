@@ -15,27 +15,29 @@ function Stage()
     this.lift = 0;
     this.score = 0;
 
-    this.width = 2/Math.sqrt(map1.length);
-    this.half = width/2;
-    this.tankSize = width*0.7;
+    this.width = 0;
+    this.half = 0;
+    this.tankSize = 0;
 
     this.generator = function(map, enemy_num)
     {
       this.map = map.slice();
       this.enemy_num = enemy_num;
       this.mapDefine();
+      
+      this.width = 2/Math.sqrt(map.length);
+      this.half = this.width/2;
+      this.tankSize = this.width*0.7;
 
       var player = new Player;
+      player.constructor([-0.75, -0.75], [this.tankSize, this.tankSize], [0, 0]);
       player.rot(0);
-      player.x_pos = -0.75;
-      player.y_pos = -0.75;
       obj_list.player = player;
       userDefine=true;
       setInterval(this.frameWork.bind(this), 10);
     }
     this.frameWork = function()
     {
-      gl.clear(gl.COLOR_BUFFER_BIT);
       //프레임 별 수행해야 할 동작
       if(this.enemy_num>0 && obj_list.enemy_list.length < this.initial_enemy_num)
       {
@@ -46,14 +48,14 @@ function Stage()
       {
         //wall이 frame에서 수행해야 할 작업.
         //이건 wall에 함수화 하셈
-        obj_list.wall_list[i].rendering();
+        //obj_list.wall_list[i].rendering();
       }
       for(e_i=0;e_i<obj_list.enemy_list.length;e_i++)
       {
         obj_list.enemy_list[e_i].ai_action();
-        obj_list.enemy_list[e_i].rendering();
+        //obj_list.enemy_list[e_i].rendering();
       }
-      obj_list.player.rendering();
+      //obj_list.player.rendering();
     }
 
     this.spawn = function()
@@ -99,7 +101,7 @@ function Stage()
           {
             var wall_instance = new Wall();
             wall_instance.index=obj_indexer++;
-            wall_instance.constructor([currentX, currentY],[width, width],[j, i]);
+            wall_instance.constructor([currentX, currentY],[this.width, this.width],[j, i]);
             obj_list.wall_list.push(wall_instance);
           }
           if(map[(i*axis_num)+j]==2)
@@ -107,7 +109,7 @@ function Stage()
             var enemy_instance=new Enemy();
             enemy_instance.index=obj_indexer++;
             enemy_instance.rot(-2);
-            enemy_instance.constructor([currentX, currentY],[tankSize, tankSize],[j, i]);
+            enemy_instance.constructor([currentX, currentY],[this.tankSize, this.tankSize],[j, i]);
             this.spawn_point_list.push([currentX, currentY]);
             obj_list.enemy_list.push(enemy_instance);
             this.initial_enemy_num++;

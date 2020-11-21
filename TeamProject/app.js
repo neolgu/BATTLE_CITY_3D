@@ -1,9 +1,12 @@
 
 class Manager {
     constructor(uiCanvasId, gmCanvasId, minimapCanvasId) {
-        //this.gmmgr = new GameUI();
+        this.gmmgr = new GameManager();
+        this.gmmgr.initializer();
+
         this.uimgr = new UIManager(uiCanvasId);
         //this.graphic = new Graphic();
+
         this.minimap = new MiniMapManager(minimapCanvasId);
     }
 
@@ -12,12 +15,12 @@ class Manager {
 
         if (result != null){
             if(1<= result && result <= 5){// game, n-stage 시작
-                //gmmgr.start n stage
+                //start n stage
                 console.log("Game start, " + result + "-stage.");
+                this.gmmgr.stage_loader(result);
 
-                
-
-                this.minimap.dataBind(gamedata);
+                // minimap load
+                this.minimap.dataBind(obj_list);
                 this.minimap.execuse();
             }
         }
@@ -25,16 +28,17 @@ class Manager {
     }
 }
 
-// MINIMAP TEST DATA
-var gamedata = {}
-gamedata.player = {};
-gamedata.player.x_pos = 0.5;
-gamedata.player.y_pos = 0.5;
+var obj_indexer = 0;
+
 
 window.onload = () => {
-    var manager = new Manager("ui-canvas", "gl-canvas", "minimap-canvas");
+    manager = new Manager("ui-canvas", "gl-canvas", "minimap-canvas");
+    obj_list = new ObjectList();
 
     window.addEventListener('keydown', (e) => manager.keyEvent(e));
+
+    window.addEventListener('keydown',input);
+    window.addEventListener('keyup',keyupEvent);
 
     // ctx = document.getElementById("ui-canvas").getContext("2d");
     // ctx.strokeRect(0,0,document.getElementById("ui-canvas").width, document.getElementById("ui-canvas").height);
@@ -47,14 +51,4 @@ window.onload = () => {
     gl_ctx.beginPath();
     gl_ctx.font = "70px Arial";
     gl_ctx.fillText("GAME SCREEN", 100, 400);
-
-    // minimap test key event
-    window.addEventListener('keydown', (e) => {
-        if(e.key == "l"){
-            gamedata.player.x_pos -= 0.1;
-        }
-        else if(e.key == "k"){
-            gamedata.player.y_pos -= 0.1;
-        }
-    });
 }

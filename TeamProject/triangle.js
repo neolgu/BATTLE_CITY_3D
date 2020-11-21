@@ -28,7 +28,7 @@ var map1 = [
 
 var width = 2/Math.sqrt(map1.length); //
 var center = width/2;
-var tankSize = width*0.7
+var tankSize = width*0.7;
 
 var program;
 var vertexBuffer;

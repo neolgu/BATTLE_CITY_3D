@@ -9,7 +9,7 @@ function Enemy(){
     this.speed = 0.005;
     this.center = [this.x_pos, this.y_pos];
     this.coord=[0,0];
-    this.shape = [tankSize,tankSize];
+    this.shape = [0, 0];
     this.sight = 1.0;
     this.predict_sight = 0.8;
     this.direction=[0, -1];
@@ -113,7 +113,7 @@ function Enemy(){
         if(this.shoot_available){
         //var direction = vec2(0, -1);//임시 direction
         var dir = [this.direction[0], this.direction[1]];
-        b.shoot([this.x_pos, this.y_pos], this.direction.slice());//direction은 추후 this.direction으로 대체
+        b.shoot([this.x_pos, this.y_pos], this.direction.slice(), [this.shape[0]*0.2, this.shape[1]*0.2]);//direction은 추후 this.direction으로 대체
         obj_list.bullet_list.push(b);
         this.shoot_available=false;
         setTimeout(this.available_bullet.bind(this), this.bulletDelay);
