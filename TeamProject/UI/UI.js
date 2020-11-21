@@ -122,11 +122,76 @@ class Stage {
  */
 class GameUI {
     constructor(ctx) {
-        this.draw(ctx);
+        this.ctx = ctx;
+
+        this.initSprite();
+
+        this.score = 300;
+        this.numEnemy = null;
+        this.hp = 2;
+
+        this.animationFlag = false;
+
+        this.drawbackground();
+        this.execuse();
     }
 
-    draw(ctx) {
+    initData(score, enemy, hp){
+        this.score = score;
+        this.numEnemy = enemy;
+        this.hp = hp;
+    }
 
+    initSprite(){
+        this.loadnum = 0;
+
+        this.enemySprite = new Image();
+        this.enemySprite.src = "./sprite/enemy.png";
+
+        this.heart = {};
+        for(var i=0; i<4; i++){
+            this.heart[i] = new Image();
+            this.heart[i].src = "./sprite/heart_" + i + ".png";
+        }
+    }
+
+    execuse(){
+        this.animationFlag = true;
+        this.draw();
+    }
+
+    stop(){
+        this.animationFlag = false;
+    }
+
+    draw() {
+        this.drawbackground();
+        this.drawScore();
+        this.drawHP();
+
+        if (this.animationFlag) {
+            requestAnimationFrame(this.draw.bind(this));
+        }
+    }
+
+    drawbackground(){
+        this.ctx.fillStyle = 'rgb(100, 100, 100)';
+        this.ctx.fillRect(0, 0, 960, 720);
+        this.ctx.clearRect(10, 10, 700, 700); // clear game canvas
+        this.ctx.clearRect(735, 510, 200, 200); // clear minimap canvas;
+    }
+
+    drawScore(){
+        this.ctx.fillStyle = 'rgb(255, 255, 255)';
+        this.ctx.font = "30px serif"
+        this.ctx.fillText("SCORE", 730, 50);
+        this.ctx.fillText(String(this.score), 730, 80);
+    }
+
+    drawHP(){
+        this.ctx.fillText("HP", 730, 150);
+        this.ctx.drawImage(this.heart[this.hp], 710, 160);
+        console.log(this.heart[this.hp]);
     }
 
     keyFunc(key) {

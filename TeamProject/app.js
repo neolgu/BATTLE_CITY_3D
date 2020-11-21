@@ -15,6 +15,8 @@ class Manager {
                 //gmmgr.start n stage
                 console.log("Game start, " + result + "-stage.");
 
+                
+
                 this.minimap.dataBind(gamedata);
                 this.minimap.execuse();
             }
