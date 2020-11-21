@@ -83,11 +83,10 @@ function Bullet()
       garbage_list.push({tag:2, idx:collider});//tag 3 is enemy
       garbage_list.push({tag:4, idx:i_b});//tag 4 is bullet
       this.collide=true;
-      console.log("is C!!");
     }
     return collider;
   }
-  
+
   this.rendering = function()
   {
     gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
@@ -125,7 +124,7 @@ function Bullet()
   {
     if(obj_list!=-1)
     {
-      obj_list.bullet_list.splice(idx, 1);
+
     }
   }
 }

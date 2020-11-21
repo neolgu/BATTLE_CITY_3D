@@ -1,3 +1,5 @@
+var stage = 0;
+
 function keyupEvent(event){
   if(userDefine)
   {
@@ -24,6 +26,7 @@ function keyupEvent(event){
         break;
     }
   }
+
 }
 function input(event){//key down
   userMoving=true;
@@ -55,6 +58,12 @@ function input(event){//key down
         }
         break;
     }
+  }
+  if(event.keyCode==49)
+  {
+    game.stage_loader(stage);
+    console.log(obj_list.wall_list.length);
+    stage++;
   }
 }
 

@@ -15,15 +15,14 @@ function ObjectList(){
         this.bullet_list = [];
         this.garbage_list =[];
     }
-    
+
     this.bullet_action = function()
     {
-        console.log(this.wall_list.length);
         var code = -1;
         var result_index = -1;
         //bullet_list가 수행해야 하는 search
         for(var bullet_index=0; bullet_index<this.bullet_list.length; bullet_index++)
-        {            
+        {
             this.bullet_list[bullet_index].frameWork();
             var center = this.bullet_list[bullet_index].center;
             var r = this.bullet_list[bullet_index].shape[0]/2;
@@ -42,7 +41,7 @@ function ObjectList(){
                         }
                         else
                             code = -2;//exception
-                        
+
                         break;
                     }
                 }
@@ -79,13 +78,13 @@ function ObjectList(){
                 this.addToGarbageList(4, bullet_index);
             }
             else if(code!=-1)
-            {   
+            {
                 this.addToGarbageList(4, bullet_index);
                 this.addToGarbageList(code, result_index);
             }
-            
+
         }
-        
+
         return [code, result_index];
     }
     this.enemy_action = function()
@@ -94,12 +93,12 @@ function ObjectList(){
         {
             //enemy_list가 수행해야 하는 search
             var ray = false;
-            
+
             for(var wall_index=0; wall_index<this.wall_list.length; wall_index++)
             {
                 var standard = (this.wall_list[wall_index].shape[0]/2) + (this.enemy_list[enemy_index].shape[0]/2)
                 ray = check_ray(this.enemy_list[enemy_index], this.wall_list[wall_index], this.enemy_list[enemy_index].predict_sight, this.wall_list[wall_index].shape[0]);
-                if(ray) 
+                if(ray)
                 {
                     this.enemy_list[enemy_index].sight_object=3;
                     break;
@@ -108,7 +107,7 @@ function ObjectList(){
                 {
                     this.enemy_list[enemy_index].sight_object=-1;
                 }
-               
+
             }
             if(this.enemy_list[enemy_index].sight_object==-1)
             {
@@ -118,7 +117,7 @@ function ObjectList(){
                         continue;
                     var standard = this.enemy_list[enemy_index].shape[0]
                     ray = check_ray(this.enemy_list[enemy_index], this.enemy_list[enemy_index2], this.enemy_list[enemy_index].predict_sight, this.enemy_list[enemy_index2].shape[0]);
-                    if(ray) 
+                    if(ray)
                     {
                         this.enemy_list[enemy_index].sight_object=2;
                         break;
@@ -131,7 +130,7 @@ function ObjectList(){
             }
             for(var bullet_index=0; bullet_index<this.bullet_list.length; bullet_index++)
             {
-                
+
             }
         }
         return [ray];//ray, etc... code형태로
@@ -144,7 +143,7 @@ function ObjectList(){
     {
         var collider = false;
         for(var wall_index=0; wall_index<this.wall_list.length; wall_index++)
-        {   
+        {
             //[width, width]는 벽돌의 크기가 제각기 다를 때 변형
             if(collisionRect(this.wall_list[wall_index].center,this.wall_list[wall_index].shape,[this.player.x_pos, this.player.y_pos],this.player.shape))
             {
@@ -152,7 +151,7 @@ function ObjectList(){
             }
         }
         for(var enemy_index=0; enemy_index<this.enemy_list.length; enemy_index++)
-        {   
+        {
             //[width, width]는 벽돌의 크기가 제각기 다를 때 변형
             if(collisionRect(this.enemy_list[enemy_index].center,this.enemy_list[enemy_index].shape,[this.player.x_pos, this.player.y_pos],this.player.shape))
             {
@@ -189,15 +188,13 @@ function ObjectList(){
     }
     this.removeObject = function(target)
     {
-        console.log(target);
         if(target.tag==3)
         {
             this.wall_list.splice(target.idx, 1);
         }
         else if(target.tag==4)
         {
-            console.log(this.bullet_list[0]);
-            this.bullet_list.splice(target.idx, 1); 
+            this.bullet_list.splice(target.idx, 1);
         }
         else if(target.tag==2)
         {
