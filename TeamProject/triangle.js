@@ -4,8 +4,6 @@ var gl;
 
 //사용자 객체값...
 //x_pos와 y_pos는 추후 player의 객체 값으로 대체되어야 한다.
-var player;
-
 var speed = 0.01;
 var direction_x = 0;
 var direction_y = 0;
@@ -13,15 +11,13 @@ var x_dial=0;
 var axis = 0;
 var userDefine=false;
 //상하좌우
-
-
+var game;
 
 var obj_list=-1;
 var uMatrix;
 
 var obj_indexer = 0;
 //오류 방지를 위한 파트
-var c_iter=1;
 //1=user, 2=enemy, 3=wall, 4=commandCentor
 var map1 = [
            0, 0, 0, 0, 0,
@@ -65,22 +61,16 @@ window.onload = function init()
 
   vertexBuffer = gl.createBuffer();
   colorBuffer = gl.createBuffer();
-  
+
 
   //event listeners for buttons
   window.addEventListener('keydown',input);
   window.addEventListener('keyup',keyupEvent);
 
   obj_list = new ObjectList();
-  mapDefine(map1);
-  player = new Player();
-  player.rot(0);
-  player.x_pos = -0.75;
-  player.y_pos = -0.75;
-  obj_list.player = player;
+  game = new GameManager();
+  game.initializer();
 
-  userDefine=true;
-  setInterval(frameWork, 10);
 };
 //사살상 main역할
 function frameWork()
@@ -90,9 +80,6 @@ function frameWork()
   //drawRect([1, 0, 0, 1], [-0.5, -0.5, 0, 0], width, false);
 
   //mapGenerator(map1);
-
-  if(obj_list.bullet_list.length>5)
-    bullet_list.shift();
 
   obj_list.frameWork();
   for(i=0;i<obj_list.wall_list.length;i++)
@@ -113,26 +100,6 @@ function frameWork()
   //drawRect([0, 1, 0, 1], [0, 0, 0, 0], tankSize, true);
   obj_list.player.rendering();
 }
-function remove_object(target)
-{
-  if(target.tag==3)
-  {
-    wall_list[target.idx].free(target.idx);
-  }
-  else if(target.tag==4)
-  {
-    bullet_list[target.idx].free(target.idx); 
-  }
-  else if(target.tag==2)
-  {
-    enemy_list[target.idx].free(target.idx);
-  }
-  else if(target.tag==1)
-  {
-    console.log("You Died");
-  }
-}
-
 //map에서 block code는 3
 function mapDefine(map)
 {
@@ -192,10 +159,6 @@ function render() {
 function renderRect(){
   gl.drawArrays(gl.TRIANGLE_FAN, 0, 4);
 }
-var rectVertex=[vec2(-0.5, 0.5),
-               vec2(-0.5, -0.5),
-               vec2(0.5, -0.5),
-               vec2(0.5, 0.5)];
 
 function coordRefactor()
 {
