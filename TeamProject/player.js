@@ -15,22 +15,22 @@ function Player(){
   this.direction_x=0;
   this.direction_y=0;
   this.moving= 0;
-  this.direction_buffer = vec2(0,0);
+  this.direction_buffer = [0,0];
   this.theta = 0;
   this.direction = [0, 0];
-  this.vertex = [
-      vec2(-0.5, 0.5),
-      vec2(-0.5, -0.5),
-      vec2(0.5, -0.5),
-      vec2(0.5, 0.5)
-    ];
+  this.vertex = new Float32Array([
+      -0.5, 0.5,
+      -0.5, -0.5,
+      0.5, -0.5,
+      0.5, 0.5
+    ]);
   this.color = [0, 1, 0, 1];
   this.shoot = function()
   {
     var b = new Bullet();
     b.team=this.team;
     if(this.shoot_available){
-      var direction = vec2(this.direction[0], this.direction[1]);//임시 direction
+      var direction = [this.direction[0], this.direction[1]];//임시 direction
       b.shoot([this.x_pos, this.y_pos], direction);//x_pos와 y_pos는 추후 this.x_pos, this.y_pos로 대체/
       obj_list.bullet_list.push(b);
       this.shoot_available=false;
@@ -86,7 +86,7 @@ function Player(){
     //-----------------------------------------------
     var new_pos_x = (this.speed*this.direction[0])*this.moving + this.x_pos;
     var new_pos_y = (this.speed*this.direction[1])*this.moving + this.y_pos;
-    
+
     var collision = obj_list.player_action();
     if(!collision)
     {
@@ -97,27 +97,27 @@ function Player(){
     }
     else//충돌 발생
     {
-      if(this.direction_buffer!=vec2(0,0))
-      {   
+      if(this.direction_buffer!=[0,0])
+      {
           this.x_pos-=this.speed*this.direction_buffer.x*(2)*this.moving; //손을 놓으면 direction이 0이 되어버린다.
           this.y_pos-=this.speed*this.direction_buffer.y*(2)*this.moving;
-          this.direction_buffer=vec2(0,0);
+          this.direction_buffer=[0,0];
       }
       else
       {
         this.x_pos-=this.speed*this.direction_x*(2)*this.moving; //손을 놓으면 direction이 0이 되어버린다.
         this.y_pos-=this.speed*this.direction_y*(2)*this.moving;
       }
-      
-      
+
+
       this.direction_x=0;
       this.direction_y=0;
     }
     this.direction_buffer.x=this.direction[0];
     this.direction_buffer.y=this.direction[1];
-    
+
     ctm = mult(ctm, translate(this.x_pos, this.y_pos, 0));//moving함수에 따로
-    
+
     ctm = mult(ctm, rotate(this.theta, 0, 0, 1));
     //이동
     ctm = mult(ctm, scalem(this.shape[0], this.shape[1], 1));
@@ -127,12 +127,6 @@ function Player(){
   }
 }
 
-var UserVertex = [
-  vec2(-0.5, 0.5),
-  vec2(-0.5, -0.5),
-  vec2(0.5, -0.5),
-  vec2(0.5, 0.5)
-];
 
 Math.radians = function(degrees) {
   return degrees * Math.PI / 180;

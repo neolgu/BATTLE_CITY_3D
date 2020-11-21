@@ -142,12 +142,12 @@ function check_ray(obj, target, sight, wid)
   var obj_direction = obj.direction.slice();
   var center = [target.x_pos, target.y_pos];//target.center;//로 바꿔야함
   var shape = target.shape.slice();
-  var obj_vector = vec2(center[0]-obj.center[0], center[1]-obj.center[1]);//벡터 계산
+  var obj_vector = [center[0]-obj.center[0], center[1]-obj.center[1]];//벡터 계산
   var half = wid;//shape[0]/2;//반지름 계산
   var vec_distance = getDistance(obj.center, center);
 
   obj_direction[0] = obj_direction[0]/vec_distance;//normalization
-  obj_direction[1] = obj_direction[1]/vec_distance; 
+  obj_direction[1] = obj_direction[1]/vec_distance;
   var theta = Math.acos((obj_direction[0]*obj_vector[0])+(obj_direction[1]*obj_vector[1]));
 
   var direction_distance = Math.cos(theta)*vec_distance;

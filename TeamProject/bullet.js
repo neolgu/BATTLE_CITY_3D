@@ -21,14 +21,14 @@ function Bullet()
   this.c_object = -1;
   this.team= true;
   //normalized vector
-  this.direction = vec2(1, 0);
+  this.direction = [1, 0];
   this.velocity = 0.02;
-  this.vertex=[
-      vec2(-0.1, 0.1),
-      vec2(-0.1, -0.1),
-      vec2(0.1, -0.1),
-      vec2(0.1, 0.1)
-    ];
+  this.vertex= new Float32Array([
+      -0.1, 0.1,
+      -0.1, -0.1,
+      0.1, -0.1,
+      0.1, 0.1
+    ]);
   this.color = [0, 0, 1, 1];
   //initialize
   this.shoot =function(position, direction)
@@ -90,7 +90,7 @@ function Bullet()
   this.rendering = function()
   {
     gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, flatten(this.vertex), gl.STATIC_DRAW);
+    gl.bufferData(gl.ARRAY_BUFFER, this.vertex, gl.STATIC_DRAW);
     //Set Attribute Position
     var vPosition = gl.getAttribLocation(program, "vPosition");
     gl.vertexAttribPointer(vPosition, 2, gl.FLOAT, false, 0, 0);
