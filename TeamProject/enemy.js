@@ -17,20 +17,20 @@ function Enemy(){
     this.theta=-90;
     this.r = 3.0;
     this.shoot_available = true;
-    this.position= vec2(0, 0);
+    this.position= [0, 0];
 
     this.team=false;
     this.sight_object=-1;
     this.moveable = true;
 
-    this.vertex = [
-        vec2(-0.5, 0.5),
-        vec2(-0.5, -0.5),
-        vec2(0.5, -0.5),
-        vec2(0.5, 0.5)
-      ];
-      
-    this.color = vec4(1, 0, 0, 1)
+    this.vertex = new Float32Array([
+        -0.5, 0.5,
+        -0.5, -0.5,
+        0.5, -0.5,
+        0.5, 0.5
+      ]);
+
+    this.color = [1, 0, 0, 1];
     this.constructor =function(position, scale, coord)
     {
       this.shape[0] = scale[0];
@@ -88,7 +88,7 @@ function Enemy(){
       else{
         rot(this.rot_dir);
         var n_post_x = (this.speed*-this.direction[0]) + this.x_pos;
-        var n_post_y = (this.speed*-this.direction[1]) + this.y_pos; 
+        var n_post_y = (this.speed*-this.direction[1]) + this.y_pos;
         this.moveable=true;
       }
     }
@@ -112,7 +112,7 @@ function Enemy(){
         b.setVelocity(0.015);
         if(this.shoot_available){
         //var direction = vec2(0, -1);//임시 direction
-        var dir = vec2(this.direction[0], this.direction[1]);
+        var dir = [this.direction[0], this.direction[1]];
         b.shoot([this.x_pos, this.y_pos], this.direction.slice());//direction은 추후 this.direction으로 대체
         obj_list.bullet_list.push(b);
         this.shoot_available=false;
@@ -166,11 +166,3 @@ function Enemy(){
       //free하면서 일어나는 일들.
     }
   }
-  
-  var UserVertex = [
-    vec2(-0.5, 0.5),
-    vec2(-0.5, -0.5),
-    vec2(0.5, -0.5),
-    vec2(0.5, 0.5)
-  ];
-  

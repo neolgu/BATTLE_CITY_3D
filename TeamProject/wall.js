@@ -12,12 +12,12 @@ function Wall()
   this.shape = [width,width];
   this.scale =0;
   //normalized vector
-  this.vertex=[
-      vec2(-0.5, 0.5),
-      vec2(-0.5, -0.5),
-      vec2(0.5, -0.5),
-      vec2(0.5, 0.5)
-    ];
+  this.vertex=new Float32Array([
+      -0.5, 0.5,
+      -0.5, -0.5,
+      0.5, -0.5,
+      0.5, 0.5
+    ]);
   this.color = [1, 0, 1, 1];
   //initialize
   this.constructor =function(position, scale, coord)
