@@ -29,7 +29,6 @@ class UIManager {
                 this.ctx.clearRect(0, 0, this.canvas.clientWidth, this.canvas.clientHeight);
                 // change UI class
                 this.nowUI = this.reloadUIClass(arr[0]);
-
                 return Number(arr[1]); // 스테이지 번호 리턴
             }
 

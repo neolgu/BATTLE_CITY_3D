@@ -17,6 +17,8 @@ function Player(){
   this.direction_y=0;
   this.moving= 0;
   
+  this.coord = [];
+
   this.direction_buffer = [0,0];
   this.theta = 0;
   this.direction = [0, 0];
@@ -69,6 +71,7 @@ function Player(){
 
   this.move = function(collision)
   {
+    console.log(this.theta);
     if(this.rot_dir!=0)
     {
       this.rot(this.rot_dir);
@@ -100,8 +103,6 @@ function Player(){
 
   this.rendering = function()
   {
-    
-
     gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
     gl.bufferData(gl.ARRAY_BUFFER, flatten(this.vertex), gl.STATIC_DRAW);
     //Set Attribute Position

@@ -17,7 +17,7 @@ class Manager {
             if(1<= result && result <= 5){// game, n-stage 시작
                 //start n stage
                 console.log("Game start, " + result + "-stage.");
-                this.gmmgr.stage_loader(result);
+                this.gmmgr.stage_loader(result-1);
 
                 // minimap load
                 this.minimap.dataBind(obj_list);

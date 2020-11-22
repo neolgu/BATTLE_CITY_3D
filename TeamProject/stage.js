@@ -3,12 +3,7 @@ function Stage()
     this.axis_num=0;
     this.block_size = 1;
     this.object_list = new ObjectList();
-    this.map = [
-           2, 0, 0, 0, 0,
-           3, 0, 0, 2, 0,
-           3, 0, 0, 3, 3,
-           0, 0, 3, 0, 0,
-           0, 0, 3, 0, 0];
+    this.map = [];
     this.initial_enemy_num = 0;
     this.spawn_point_list = [];
     this.enemy_num =0;
@@ -23,7 +18,7 @@ function Stage()
     {
       this.map = map.slice();
       this.enemy_num = enemy_num;
-      
+      console.log(enemy_num);
       
       this.width = 2/Math.sqrt(map.length);
       this.half = this.width/2;
@@ -37,26 +32,26 @@ function Stage()
       this.mapDefine();
       setInterval(this.frameWork.bind(this), 10);
     }
+
     this.frameWork = function()
     {
       //프레임 별 수행해야 할 동작
       if(this.enemy_num>0 && obj_list.enemy_list.length < this.initial_enemy_num)
       {
+        
         this.spawn();
       }
       obj_list.frameWork();
-      for(i=0;i<obj_list.wall_list.length;i++)
+      for(var i=0;i<obj_list.wall_list.length;i++)
       {
-        //wall이 frame에서 수행해야 할 작업.
-        //이건 wall에 함수화 하셈
-        //obj_list.wall_list[i].rendering();
+
       }
-      for(e_i=0;e_i<obj_list.enemy_list.length;e_i++)
+      for(var enemy_index=0;enemy_index<obj_list.enemy_list.length;enemy_index++)
       {
-        obj_list.enemy_list[e_i].ai_action();
-        //obj_list.enemy_list[e_i].rendering();
+        this.coordRefactor(obj_list.enemy_list[enemy_index]);
+        obj_list.enemy_list[enemy_index].ai_action();
       }
-      //obj_list.player.rendering();
+      this.coordRefactor(obj_list.player);
     }
 
     this.spawn = function()
@@ -65,7 +60,7 @@ function Stage()
       console.log("Spawn!");
       var idx = Math.floor(Math.random() * this.spawn_point_list.length);
       var center = this.spawn_point_list[idx];
-      center[1] = 1.5;
+      center[1] = 0.99;
       var tankSize = this.tankSize;
       var index = [0, 0];
       var enemy_instance = new Enemy();
@@ -140,11 +135,12 @@ function Stage()
 
     this.coordRefactor = function(object)
     {
-      var axis_num = Math.sqrt(map1.length);
+      var axis_num = Math.sqrt(this.map.length);
       var coord_x = object.x_pos+1;
       var coord_y = -object.y_pos+1;
-      coord_x= Math.floor(coord_x/width);
-      coord_y=Math.floor(coord_y/width);
+      coord_x= Math.floor(coord_x/this.width);
+      coord_y=Math.floor(coord_y/this.width);
+      object.coord = [coord_x, coord_y];
     }
     //대충 맵구성, 적 수, etc 구현.
 }
