@@ -2,7 +2,7 @@
 function Wall()
 {
   this.tag="wall";
-
+  this.obj_list = -1;
   this.index=0;
   this.overwhelming = false;
   this.x_pos = 0;
@@ -72,7 +72,7 @@ function Wall()
   }
   this.free = function(idx)
   {
-    if(obj_list!=-1)
+    if(this.obj_list!=-1)
     {
       //free하면서 일어나는 일들
     }

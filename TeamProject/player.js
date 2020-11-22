@@ -1,16 +1,18 @@
 function Player(){
+  //main variables
   this.tag="player";
   this.x_pos=0;
   this.y_pos=0;
   this.rot_dir =0;
   this.shape=[0, 0];
-  this.bulletDelay = 0.5;
+  this.r = 1.0;
   this.speed = 0.008;
   this.center = [this.x_pos, this.y_pos];
   this.position= [0, 0];
+  this.obj_list = -1;
+  //bullet variables
   this.shoot_available=true;
   this.bulletDelay=800;
-  this.r = 1.0;
   this.team=true;
   this.rotating = false;
   this.moving= 0;
@@ -39,14 +41,14 @@ function Player(){
     }
 
   this.shoot = function()
-  {
-    console.log("shoot");
-    var b = new Bullet();
-    b.team=this.team;
+  { 
     if(this.shoot_available){
+      console.log("Shoot");
+      var b = new Bullet();
+      b.team=this.team;
       var direction = [this.direction[0], this.direction[1]];//임시 direction
       b.shoot([this.x_pos, this.y_pos], direction, [this.shape[0]*0.2, this.shape[1]*0.2]);//x_pos와 y_pos는 추후 this.x_pos, this.y_pos로 대체/
-      obj_list.bullet_list.push(b);
+      this.obj_list.bullet_list.push(b);
       this.shoot_available=false;
       setTimeout(this.available_bullet.bind(this), this.bulletDelay);
     }

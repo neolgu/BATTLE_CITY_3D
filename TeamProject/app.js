@@ -20,12 +20,60 @@ class Manager {
                 this.gmmgr.stage_loader(result-1);
 
                 // minimap load
-                this.minimap.dataBind(obj_list);
+                this.minimap.dataBind(this.gmmgr.obj_list);
                 this.minimap.execuse();
             }
         }
         //game.keyEvent(e);
     }
+    game_keyupEvent(event) {
+        switch (event.keyCode) {
+          case 37:
+            if (this.gmmgr.obj_list.player.rot_dir == 1)
+                this.gmmgr.obj_list.player.rot_dir = 0;
+                break;
+          case 39:
+            if (this.gmmgr.obj_list.player.rot_dir == -1)
+                this.gmmgr.obj_list.player.rot_dir = 0;
+                break;
+          case 38://위
+            if (this.gmmgr.obj_list.player.moving == 1)
+                this.gmmgr.obj_list.player.moving = 0;
+            //obj_list.player.direction_y=0;
+                break;
+          case 40://아래
+            if (this.gmmgr.obj_list.player.moving == -1)
+                this.gmmgr.obj_list.player.moving = 0;
+                break;
+          default:
+            break;
+        }
+      }
+      game_keydownEvent(event) {//key down
+        switch (event.keyCode) {
+          case 37:
+            this.gmmgr.obj_list.player.rot_dir = 1;
+            //obj_list.player.direction_x=-1;
+            break;
+          case 38:
+            this.gmmgr.obj_list.player.direction_y = 1;
+            this.gmmgr.obj_list.player.moving = 1;
+            break;
+          case 39:
+            this.gmmgr.obj_list.player.rot_dir = -1;
+            //obj_list.player.direction_x=1;
+            break;
+          case 40:
+            this.gmmgr.obj_list.player.moving = -1;
+            this.gmmgr.obj_list.player.direction_y = -1;
+            break;
+          //spacebar
+          case 32://setTimeout이용.
+            this.gmmgr.obj_list.player.shoot();
+            break;
+        }
+      }
+      
 }
 
 var obj_indexer = 0;
@@ -33,12 +81,11 @@ var obj_indexer = 0;
 
 window.onload = () => {
     manager = new Manager("ui-canvas", "gl-canvas", "minimap-canvas");
-    obj_list = new ObjectList();
 
     window.addEventListener('keydown', (e) => manager.keyEvent(e));
 
-    window.addEventListener('keydown',input);
-    window.addEventListener('keyup',keyupEvent);
+    window.addEventListener('keydown', (e)=> manager.game_keydownEvent(e));
+    window.addEventListener('keyup',(e)=>manager.game_keyupEvent(e));
 
     // ctx = document.getElementById("ui-canvas").getContext("2d");
     // ctx.strokeRect(0,0,document.getElementById("ui-canvas").width, document.getElementById("ui-canvas").height);

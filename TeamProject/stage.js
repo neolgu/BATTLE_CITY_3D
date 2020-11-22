@@ -1,5 +1,6 @@
 function Stage()
 {
+    this.obj_list = -1;
     this.axis_num=0;
     this.block_size = 1;
     this.object_list = new ObjectList();
@@ -14,6 +15,7 @@ function Stage()
     this.half = 0;
     this.tankSize = 0;
 
+
     this.generator = function(map, enemy_num)
     {
       this.map = map.slice();
@@ -25,9 +27,10 @@ function Stage()
       this.tankSize = this.width*0.7;
       
       var player = new Player;
+      player.obj_list= this.obj_list;
       player.constructor([-0.75, -0.75], [this.tankSize, this.tankSize], [0, 0]);
       player.rot(0);
-      obj_list.player = player;
+      this.obj_list.player = player;
       
       this.mapDefine();
       setInterval(this.frameWork.bind(this), 10);
@@ -36,22 +39,22 @@ function Stage()
     this.frameWork = function()
     {
       //프레임 별 수행해야 할 동작
-      if(this.enemy_num>0 && obj_list.enemy_list.length < this.initial_enemy_num)
+      if(this.enemy_num>0 && this.obj_list.enemy_list.length < this.initial_enemy_num)
       {
         
         this.spawn();
       }
-      obj_list.frameWork();
-      for(var i=0;i<obj_list.wall_list.length;i++)
+      this.obj_list.frameWork();
+      for(var i=0;i<this.obj_list.wall_list.length;i++)
       {
 
       }
-      for(var enemy_index=0;enemy_index<obj_list.enemy_list.length;enemy_index++)
+      for(var enemy_index=0;enemy_index<this.obj_list.enemy_list.length;enemy_index++)
       {
-        this.coordRefactor(obj_list.enemy_list[enemy_index]);
-        obj_list.enemy_list[enemy_index].ai_action();
+        this.coordRefactor(this.obj_list.enemy_list[enemy_index]);
+        this.obj_list.enemy_list[enemy_index].ai_action();
       }
-      this.coordRefactor(obj_list.player);
+      this.coordRefactor(this.obj_list.player);
     }
 
     this.spawn = function()
@@ -64,10 +67,11 @@ function Stage()
       var tankSize = this.tankSize;
       var index = [0, 0];
       var enemy_instance = new Enemy();
+      enemy_instance.obj_list = this.obj_list;
       enemy_instance.index = obj_indexer++;
       enemy_instance.rot(-2);
       enemy_instance.constructor(center, [tankSize, tankSize], index);
-      obj_list.enemy_list.push(enemy_instance);
+      this.obj_list.enemy_list.push(enemy_instance);
       this.enemy_num = this.enemy_num-1;
     }
 
@@ -98,16 +102,17 @@ function Stage()
             var wall_instance = new Wall();
             wall_instance.index=obj_indexer++;
             wall_instance.constructor([currentX, currentY],[this.width, this.width],[j, i]);
-            obj_list.wall_list.push(wall_instance);
+            this.obj_list.wall_list.push(wall_instance);
           }
           if(map[(i*axis_num)+j]==2)
           {
             var enemy_instance=new Enemy();
             enemy_instance.index=obj_indexer++;
             enemy_instance.rot(-2);
+            enemy_instance.obj_list= this.obj_list;
             enemy_instance.constructor([currentX, currentY],[this.tankSize, this.tankSize],[j, i]);
             this.spawn_point_list.push([currentX, currentY]);
-            obj_list.enemy_list.push(enemy_instance);
+            this.obj_list.enemy_list.push(enemy_instance);
             this.initial_enemy_num++;
           }
         }
@@ -129,7 +134,7 @@ function Stage()
         wall_instance.index = obj_indexer++;
         wall_instance.constructor(current_center, shape, [-1, -1]);
         wall_instance.overwhelming = true;
-        obj_list.wall_list.push(wall_instance);
+        this.obj_list.wall_list.push(wall_instance);
       }
     }
 

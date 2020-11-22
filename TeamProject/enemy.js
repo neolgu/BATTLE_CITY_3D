@@ -4,7 +4,7 @@ function Enemy(){
     this.x_pos=0;
     this.y_pos=0;
     this.shape=[0, 0];
-
+    this.obj_list=-1;
     this.bulletDelay = 2000;
     this.speed = 0.005;
     this.center = [this.x_pos, this.y_pos];
@@ -48,8 +48,8 @@ function Enemy(){
     // 20% shoot
     this.ai_action = function(){
       var ray=false;
-      if(obj_list.player!=-1)
-        ray = check_ray(this, obj_list.player, this.sight, this.shape[0]/2);
+      if(this.obj_list!=-1)
+        ray = check_ray(this, this.obj_list.player, this.sight, this.shape[0]/2);
       if(ray)
       {
         this.shoot();
@@ -132,7 +132,7 @@ function Enemy(){
         //var direction = vec2(0, -1);//임시 direction
         var dir = [this.direction[0], this.direction[1]];
         b.shoot([this.x_pos, this.y_pos], this.direction.slice(), [this.shape[0]*0.2, this.shape[1]*0.2]);//direction은 추후 this.direction으로 대체
-        obj_list.bullet_list.push(b);
+        this.obj_list.bullet_list.push(b);
         this.shoot_available=false;
         setTimeout(this.available_bullet.bind(this), this.bulletDelay);
       }

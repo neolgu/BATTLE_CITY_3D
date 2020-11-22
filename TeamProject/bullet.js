@@ -123,7 +123,7 @@ function Bullet()
   }
   this.free = function(idx)
   {
-    if(obj_list!=-1)
+    if(this.obj_list!=-1)
     {
 
     }
