@@ -13,10 +13,8 @@ function Player(){
   this.r = 1.0;
   this.team=true;
   this.rotating = false;
-  this.direction_x=0;
-  this.direction_y=0;
   this.moving= 0;
-  
+  this.controlable=true;
   this.coord = [];
 
   this.direction_buffer = [0,0];
@@ -72,6 +70,8 @@ function Player(){
   this.move = function(collision)
   {
     console.log(this.theta);
+    if(this.controlable=false)
+      return -1;
     if(this.rot_dir!=0)
     {
       this.rot(this.rot_dir);
@@ -82,20 +82,21 @@ function Player(){
       return 0;
     if(!collision)
     {
-      this.x_pos = new_pos_x;//+=speed*direction_x;
+      this.x_pos = new_pos_x;
       this.center[0] = new_pos_x;
-      this.y_pos = new_pos_y;//+=speed*direction_y;
+      this.y_pos = new_pos_y;
       this.center[1] = new_pos_y;
     }
     else//충돌 발생
     {
+      this.controlable=false;
       for(var times =0; times<5; times++){
         this.x_pos-=this.speed*this.direction_buffer.x*this.moving; //손을 놓으면 direction이 0이 되어버린다.
         this.y_pos-=this.speed*this.direction_buffer.y*this.moving;
         this.center = [this.x_pos, this.y_pos];
       }
-      this.direction_x=0;
-      this.direction_y=0;
+      this.controlable=true;
+      this.rot(1);
     }
     this.direction_buffer.x=this.direction[0];
     this.direction_buffer.y=this.direction[1];
