@@ -1,5 +1,6 @@
 function Stage()
 {
+    this.obj_indexer=0;
     this.obj_list = -1;
     this.axis_num=0;
     this.block_size = 1;
@@ -68,7 +69,7 @@ function Stage()
       var index = [0, 0];
       var enemy_instance = new Enemy();
       enemy_instance.obj_list = this.obj_list;
-      enemy_instance.index = obj_indexer++;
+      enemy_instance.index = this.obj_indexer++;
       enemy_instance.rot(-2);
       enemy_instance.constructor(center, [tankSize, tankSize], index);
       this.obj_list.enemy_list.push(enemy_instance);
@@ -100,14 +101,14 @@ function Stage()
           if(map[(i*axis_num)+j]==3)
           {
             var wall_instance = new Wall();
-            wall_instance.index=obj_indexer++;
+            wall_instance.index=this.obj_indexer++;
             wall_instance.constructor([currentX, currentY],[this.width, this.width],[j, i]);
             this.obj_list.wall_list.push(wall_instance);
           }
           if(map[(i*axis_num)+j]==2)
           {
             var enemy_instance=new Enemy();
-            enemy_instance.index=obj_indexer++;
+            enemy_instance.index=this.obj_indexer++;
             enemy_instance.rot(-2);
             enemy_instance.obj_list= this.obj_list;
             enemy_instance.constructor([currentX, currentY],[this.tankSize, this.tankSize],[j, i]);
@@ -131,7 +132,7 @@ function Stage()
       {
         var current_center = center_list[wall_index];
         var wall_instance = new Wall();
-        wall_instance.index = obj_indexer++;
+        wall_instance.index = this.obj_indexer++;
         wall_instance.constructor(current_center, shape, [-1, -1]);
         wall_instance.overwhelming = true;
         this.obj_list.wall_list.push(wall_instance);

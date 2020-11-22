@@ -71,7 +71,7 @@ function Player(){
 
   this.move = function(collision)
   {
-    console.log(this.theta);
+    // console.log(this.theta);
     if(this.controlable=false)
       return -1;
     if(this.rot_dir!=0)
