@@ -11,6 +11,7 @@ function Player(){
   this.position= [0, 0];
   this.obj_list = -1;
   //bullet variables
+  this.health = 3;
   this.shoot_available=true;
   this.bulletDelay=800;
   this.team=true;
@@ -55,7 +56,12 @@ function Player(){
   }
   this.damaged = function()
   {
-      console.log("damaged!");
+      this.health-=1;
+      if(this.health<0)
+      {
+        return 0;
+      }
+      return 1;
   }
   this.available_bullet = function()
   {

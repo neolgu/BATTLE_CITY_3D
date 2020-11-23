@@ -18,7 +18,7 @@ function GameManager(){
            3, 0, 0, 0, 0, 3, 0, 0, 0, 0,
            3, 0, 0, 3, 3, 3, 0, 0, 3, 3,
            0, 0, 3, 0, 0, 0, 0, 3, 0, 0,
-           0, 0, 3, 0, 0, 0, 0, 3, 0, 0]
+           0, 4, 3, 0, 0, 0, 0, 3, 0, 0]
       );
       this.enemy_num_list.push(5);
       this.map_list.push(
@@ -26,7 +26,7 @@ function GameManager(){
            3, 0, 0, 2, 0,
            3, 0, 0, 3, 3,
            3, 0, 3, 0, 0,
-           0, 0, 3, 0, 0]
+           0, 4, 3, 0, 0]
       );
       this.enemy_num_list.push(10);
       this.map_list.push(
@@ -35,7 +35,7 @@ function GameManager(){
            0, 3, 2, 0, 3, 3,
            0, 3, 0, 3, 0, 0,
            0, 0, 0, 3, 0, 0,
-           0, 0, 0, 3, 0, 0]
+           0, 0, 4, 3, 0, 0]
       );
       this.enemy_num_list.push(15);
     }
@@ -48,6 +48,7 @@ function GameManager(){
       var stage = new Stage();
       stage.obj_list = this.obj_list;
       stage.generator(currentMap, currentEnemy_num);
+      this.currentStage = stage;
     }
     this.game_end=function()//게임 종료, 메인으로
     {

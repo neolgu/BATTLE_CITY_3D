@@ -6,7 +6,8 @@ function ObjectList(){
     this.enemy_list =[];
     this.bullet_list = [];
     this.garbage_list =[];
-
+    this.commandCenter = 1;
+    this.over=false;
     this.initializer = function()
     {
         this.player = -1;
@@ -14,6 +15,7 @@ function ObjectList(){
         this.enemy_list =[];
         this.bullet_list = [];
         this.garbage_list =[];
+        this.commandCenter=1;
     }
 
     this.bullet_action = function()
@@ -62,24 +64,38 @@ function ObjectList(){
                 }
             }
             if(code==-1)
-            {/*
+            {
                 if(this.player!=-1)
                 {
-                    var standard = (r/2) + (this.player.shape[0]/2)
-                    if(getDistance(center, this.player.center)<standard)
+                    console.log(this.player.health);
+                    var standard = (r/2) + (this.player.shape[0]/2);
+                    if(getDistance(center, this.player.center)<standard && !this.bullet_list[bullet_index].team)
                     {
                         code=1;
                         result_index=-1;
                     }
-                }*/
+                }
+            }
+            if(code==-1)
+            {
+                var standard = (r/2) + (this.commandCenter.shape[0]/2);
+                if(getDistance(center, this.commandCenter.center)<standard)
+                {
+                    console.log("Com");
+                    var isLive = this.commandCenter.damaged();
+                    if(!isLive)
+                    {
+                        code=4; result_index=-1;
+                    }
+                }
             }
             if(code==-2)
             {
-                this.addToGarbageList(4, bullet_index);
+                this.addToGarbageList(5, bullet_index);
             }
             else if(code!=-1)
             {
-                this.addToGarbageList(4, bullet_index);
+                this.addToGarbageList(5, bullet_index);
                 this.addToGarbageList(code, result_index);
             }
 
@@ -195,13 +211,27 @@ function ObjectList(){
         {
             this.wall_list.splice(target.idx, 1);
         }
-        else if(target.tag==4)
+        else if(target.tag==5)
         {
             this.bullet_list.splice(target.idx, 1);
         }
         else if(target.tag==2)
         {
             this.enemy_list.splice(target.idx, 1);
+        }
+        else if(target.tag==4)
+        {
+            console.log("gameover");
+            this.over=true;
+        }
+        else if(target.tag==1)
+        {
+            var isLive = this.player.damaged();
+            console.log("플레이어");
+            if(!isLive)
+            {
+                this.over=true;
+            }
         }
     }
 }
