@@ -17,3 +17,9 @@ body {
     height: 100%;
     overflow: hidden;
 }
+
+@font-face {
+    font-family: 'PressStart';
+    font-style: normal;
+    src: url(./UI/PressStart.ttf);
+}

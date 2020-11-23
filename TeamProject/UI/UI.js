@@ -24,14 +24,20 @@ class UIManager {
                 // change UI class
                 this.nowUI = this.reloadUIClass(arr[0]);
             }
-            else if(arr.length == 2 && arr[0] == "Game"){ // 스테이지 선택시
+            else if (arr.length == 2 && arr[0] == "Game") { // 스테이지 선택시
                 // clear ui canvas
                 this.ctx.clearRect(0, 0, this.canvas.clientWidth, this.canvas.clientHeight);
                 // change UI class
                 this.nowUI = this.reloadUIClass(arr[0]);
                 return Number(arr[1]); // 스테이지 번호 리턴
             }
-
+            else if (arr.length == 2 && arr[0] == "Stage") { // 게임에서 복귀
+                // clear ui canvas
+                this.ctx.clearRect(0, 0, this.canvas.clientWidth, this.canvas.clientHeight);
+                // change UI class
+                this.nowUI = this.reloadUIClass(arr[0]);
+                return -1;
+            }
         }
         return null;
     }
@@ -67,7 +73,7 @@ class Start {
 
     draw(ctx) {
         var img = new Image();
-        img.onload = function(){
+        img.onload = function () {
             ctx.drawImage(img, 0, 0);
         }
         img.src = "./UI/title.png";
@@ -90,8 +96,15 @@ class StageUI {
 
     draw(ctx) {
         var img = new Image();
-        img.onload = function(){
+        img.onload = function load() {
+            if(typeof load.counter == 'undefined')
+                load.counter = 2;
             ctx.drawImage(img, 0, 0);
+
+            if(load.counter > 0){
+                load.counter -= 1;
+                requestAnimationFrame(img.onload.bind(this));
+            }
         }
         img.src = "./UI/stage.png";
     }
@@ -126,41 +139,43 @@ class GameUI {
         this.initSprite();
 
         this.score = 300;
-        this.numEnemy = null;
+        this.numEnemy = 10;
         this.hp = 2;
 
         this.pause = false;
         this.animationFlag = false;
 
+        this.escFlag = false;
+
         this.drawbackground();
         this.execuse();
     }
 
-    initData(score, enemy, hp){
+    initData(score, enemy, hp) {
         this.score = score;
         this.numEnemy = enemy;
         this.hp = hp;
     }
 
-    initSprite(){
+    initSprite() {
         this.loadnum = 0;
 
         this.enemySprite = new Image();
         this.enemySprite.src = "./sprite/enemy.png";
 
         this.heart = {};
-        for(var i=0; i<4; i++){
+        for (var i = 0; i < 4; i++) {
             this.heart[i] = new Image();
             this.heart[i].src = "./sprite/heart_" + i + ".png";
         }
     }
 
-    execuse(){
+    execuse() {
         this.animationFlag = true;
         this.draw();
     }
 
-    stop(){
+    stop() {
         this.animationFlag = false;
     }
 
@@ -168,34 +183,65 @@ class GameUI {
         this.drawbackground();
         this.drawScore();
         this.drawHP();
+        this.drawEnemy();
 
+        if (this.escFlag) {
+            this.drawPause();
+        }
         if (this.animationFlag) {
             requestAnimationFrame(this.draw.bind(this));
         }
     }
 
-    drawbackground(){
+    drawbackground() {
         this.ctx.fillStyle = 'rgb(100, 100, 100)';
         this.ctx.fillRect(0, 0, 960, 720);
         this.ctx.clearRect(10, 10, 700, 700); // clear game canvas
         this.ctx.clearRect(735, 510, 200, 200); // clear minimap canvas;
     }
 
-    drawScore(){
+    drawScore() {
         this.ctx.fillStyle = 'rgb(255, 255, 255)';
-        this.ctx.font = "30px serif"
+        this.ctx.font = "30px PressStart";
         this.ctx.fillText("SCORE", 730, 50);
         this.ctx.fillText(String(this.score), 730, 80);
     }
 
-    drawHP(){
+    drawHP() {
+        this.ctx.font = "30px PressStart";
         this.ctx.fillText("HP", 730, 150);
         this.ctx.drawImage(this.heart[this.hp], 710, 160);
+    }
+
+    drawEnemy() {
+        this.ctx.font = "30px PressStart";
+        this.ctx.fillText("Enemy", 730, 270);
+        this.ctx.drawImage(this.enemySprite, 730, 290, 40, 40);
+        this.ctx.fillText("X" + this.numEnemy, 780, 325);
+    }
+
+    drawPause() {
+        this.ctx.fillStyle = 'rgba(150, 150, 150, 0.4)';
+        this.ctx.fillRect(10, 10, 700, 700);
+        this.ctx.fillStyle = 'rgb(255, 255, 255)';
+        this.ctx.font = "50px PressStart";
+        this.ctx.fillText("PAUSE", 240, 300);
+        this.ctx.font = "20px PressStart";
+        this.ctx.fillText("(ESC: Cancle, Enter: Stage)", 100, 400);
     }
 
     keyFunc(key) {
         var result = null;
         switch (key) {
+            case "Escape":
+                this.escFlag = !this.escFlag;
+                break;
+            case "Enter":
+                if (this.escFlag) {
+                    result = "Stage" + ",-1";
+                    this.stop();
+                }
+                break;
             default:
         }
         return result;

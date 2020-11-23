@@ -19,14 +19,22 @@ class Manager {
                 //start n stage
                 console.log("Game start, " + result + "-stage.");
                 this.gmmgr.stage_loader(result-1);
-                console.log(this.gmmgr.obj_list);
+
+                if(this.uimgr.nowUI instanceof GameUI){
+                  //this.uimgr.nowUI.initData(s, this.gmmgr.stage_list, hp);
+                }
 
                 // minimap load
                 this.minimap.dataBind(this.gmmgr.obj_list);
                 this.minimap.execuse();
 
+                // graphic load
                 this.graphicmgr.dataBind(this.gmmgr.obj_list);
                 this.graphicmgr.execuse();
+            }
+            if(result == -1){//all stop.
+              this.minimap.stop();
+              this.graphicmgr.stop();
             }
         }
         //game.keyEvent(e);
