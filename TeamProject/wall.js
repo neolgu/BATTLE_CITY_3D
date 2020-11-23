@@ -11,6 +11,8 @@ function Wall()
   this.center = [0, 0];
   this.shape = [];
   this.scale =0;
+  this.health = 1;
+
   //normalized vector
   this.vertex=new Float32Array([
       -0.5, 0.5,
@@ -69,6 +71,15 @@ function Wall()
     var uMatrix = gl.getUniformLocation(program, "uMatrix");
     gl.uniformMatrix4fv(uMatrix, false, flatten(ctm));
     renderRect();
+  }
+  this.damaged = function()
+  {
+    this.health-=1;
+    if(this.health<0)
+    {
+      return 0;
+    }
+    else return 1;
   }
   this.free = function(idx)
   {

@@ -19,6 +19,7 @@ function Stage()
 
     this.generator = function(map, enemy_num)
     {
+      this.obj_list.over = false;
       this.map = map.slice();
       this.enemy_num = enemy_num;
       console.log(enemy_num);
@@ -29,6 +30,7 @@ function Stage()
       
       var player = new Player;
       player.obj_list= this.obj_list;
+
       player.constructor([-0.75, -0.75], [this.tankSize, this.tankSize], [0, 0]);
       player.rot(0);
       this.obj_list.player = player;
@@ -39,10 +41,11 @@ function Stage()
 
     this.frameWork = function()
     {
+      if(this.obj_list.over)
+        this.over();
       //프레임 별 수행해야 할 동작
       if(this.enemy_num>0 && this.obj_list.enemy_list.length < this.initial_enemy_num)
       {
-        
         this.spawn();
       }
       this.obj_list.frameWork();
@@ -115,6 +118,16 @@ function Stage()
             this.spawn_point_list.push([currentX, currentY]);
             this.obj_list.enemy_list.push(enemy_instance);
             this.initial_enemy_num++;
+          }
+          if(map[(i*axis_num)+j]==4)
+          {
+            
+            var wall_instance = new Wall();
+            wall_instance.index=this.obj_indexer++;
+            wall_instance.constructor([currentX, currentY],[this.width, this.width],[j, i]);
+            wall_instance.health=3;
+            console.log(wall_instance.center);
+            this.obj_list.commandCenter = wall_instance;
           }
         }
       }
