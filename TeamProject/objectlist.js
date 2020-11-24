@@ -90,8 +90,9 @@ function ObjectList(){
             if(code==-1)
             {
                 var standard = (r/2) + (this.commandCenter.shape[0]/2);
-                if(getDistance(center, this.commandCenter.center)<standard)
+                if(getDistance(center, this.commandCenter.center)<standard&& !this.bullet_list[bullet_index].team)
                 {
+                    console.log("abcd");
                     var isLive = this.commandCenter.damaged();
                     if(!isLive)
                     {

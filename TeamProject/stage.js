@@ -24,8 +24,6 @@ function Stage()
       this.obj_list.over = false;
       this.map = map.slice();
       this.enemy_num = new Number(enemy_num);
-      // console.log(enemy_num);
-
       this.width = 2/Math.sqrt(map.length);
       this.half = this.width/2;
       this.tankSize = this.width*0.7;
@@ -49,7 +47,6 @@ function Stage()
       //프레임 별 수행해야 할 동작
       this.obj_list.frameWork();
       this.score += this.obj_list.frameScore;
-      console.log(this.score);
       this.obj_list.frameScore=0;
       for(var enemy_index =0; enemy_index<this.obj_list.enemy_list.length; enemy_index++)
       {
@@ -159,7 +156,6 @@ function Stage()
             wall_instance.index=this.obj_indexer++;
             wall_instance.constructor([currentX, currentY],[this.width, this.width],[j, i]);
             wall_instance.health=3;
-            // console.log(wall_instance.center);
             this.obj_list.commandCenter = wall_instance;
           }
         }

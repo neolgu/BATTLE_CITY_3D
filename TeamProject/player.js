@@ -6,7 +6,7 @@ function Player(){
   this.rot_dir =0;
   this.shape=[0, 0];
   this.r = 1.0;
-  this.speed = 0.008;
+  this.speed = 0.005;
   this.center = [this.x_pos, this.y_pos];
   this.position= [0, 0];
   this.obj_list = -1;

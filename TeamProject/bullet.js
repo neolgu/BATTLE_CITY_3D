@@ -22,7 +22,7 @@ function Bullet()
   this.team= true;
   //normalized vector
   this.direction = [1, 0];
-  this.velocity = 0.02;
+  this.velocity = 0.03;
   this.vertex= new Float32Array([
       -0.1, 0.1,
       -0.1, -0.1,
