@@ -93,14 +93,7 @@ class StageUI {
     draw(ctx) {
         var img = new Image();
         img.onload = function load() {
-            if(typeof load.counter == 'undefined')
-                load.counter = 2;
             ctx.drawImage(img, 0, 0);
-
-            if(load.counter > 0){
-                load.counter -= 1;
-                requestAnimationFrame(img.onload.bind(this));
-            }
         }
         img.src = "./UI/stage.png";
     }
@@ -138,19 +131,20 @@ class GameUI {
         this.stage = 0;
         this.player = 3;
 
-        this.pause = false;
+        this.gm = null;
+
         this.animationFlag = false;
 
         this.escFlag = false;
 
         this.drawbackground();
-        this.execuse();
     }
 
-    initData(score, stage, player) {
+    initData(score, stage, player, gm) {
         this.score = score;
         this.stage = stage;
         this.player = player;
+        this.gm = gm;
     }
 
     initSprite() {
@@ -180,9 +174,13 @@ class GameUI {
         this.drawScore();
         this.drawHP();
         this.drawEnemy();
+        console.log(this.gm.currentState);
 
         if (this.escFlag) {
             this.drawPause();
+        }
+        if((this.gm.currentState == 1 || this.gm.currentState == -1)){
+            this.drawEnd();
         }
         if (this.animationFlag) {
             requestAnimationFrame(this.draw.bind(this));
@@ -231,17 +229,40 @@ class GameUI {
         this.ctx.fillText("(ESC: Cancle, Enter: Main)", 100, 400);
     }
 
+    drawEnd(){
+        this.ctx.fillStyle = 'rgba(150, 150, 150, 0.4)';
+        this.ctx.fillRect(10, 10, 700, 700);
+        this.ctx.fillStyle = 'rgb(255, 255, 255)';
+
+        if(this.gm.currentState == 1){
+            this.ctx.font = "50px PressStart";
+            this.ctx.fillText("WIN", 100, 300);
+            this.ctx.font = "20px PressStart";
+            this.ctx.fillText("PRESS ENTER", 100, 400);
+        }
+        else if(this.gm.currentState == -1){
+            this.ctx.font = "50px PressStart";
+            this.ctx.fillText("LOSS", 100, 300);
+            this.ctx.font = "20px PressStart";
+            this.ctx.fillText("PRESS ENTER", 100, 400);
+        }
+    }
+
     keyFunc(key) {
         var result = null;
         switch (key) {
             case "Escape":
-                if(this.stage != -1)
+                if(!(this.gm.currentState == 1 || this.gm.currentState == -1))
                     this.escFlag = !this.escFlag;
                 break;
             case "Enter":
-                if (this.escFlag) {
+                if (this.escFlag) { // pause
                     result = "End" + ",-1";
                     this.stop();
+                }
+                if((this.gm.currentState == 1 || this.gm.currentState == -1)){ // game end
+                    this.stop();
+                    result = "End" + ",-1";
                 }
                 break;
             default:
