@@ -12,6 +12,7 @@ function Stage()
     this.lift = 0;
     this.score = 0;
 
+    this.manager = null;
     this.width = 0;
     this.half = 0;
     this.tankSize = 0;
@@ -23,18 +24,18 @@ function Stage()
       this.map = map.slice();
       this.enemy_num = new Number(enemy_num);
       // console.log(enemy_num);
-      
+
       this.width = 2/Math.sqrt(map.length);
       this.half = this.width/2;
       this.tankSize = this.width*0.7;
-      
+
       var player = new Player;
       player.obj_list= this.obj_list;
 
       player.constructor([-0.75, -0.75], [this.tankSize, this.tankSize], [0, 0]);
       player.rot(0);
       this.obj_list.player = player;
-      
+
       this.mapDefine();
       setInterval(this.frameWork.bind(this), 10);
     }
@@ -47,6 +48,15 @@ function Stage()
       if(this.enemy_num>0 && this.obj_list.enemy_list.length < this.initial_enemy_num)
       {
         this.spawn();
+      }
+      else if(this.enemy_num==0 && this.obj_list.enemy_list.length==0)
+      {
+        if(this.manager!=null)
+        {
+          console.log("게임 승리");
+          this.manager(1);
+          this.stop();
+        }
       }
       this.obj_list.frameWork();
       for(var i=0;i<this.obj_list.wall_list.length;i++)
@@ -81,9 +91,15 @@ function Stage()
 
     this.over = function()
     {
+        if(this.manager!=null)
+          this.manager(-1);
+        this.stop();
+        console.log("게임 오버_메인 화면으로");
+    }
+    this.stop = function()
+    {
         for (var i = 1; i < 99999; i++)
           window.clearInterval(i);
-        console.log("게임 오버_메인 화면으로");
     }
 
     this.mapDefine=function()//map initial
@@ -121,7 +137,7 @@ function Stage()
           }
           if(map[(i*axis_num)+j]==4)
           {
-            
+
             var wall_instance = new Wall();
             wall_instance.index=this.obj_indexer++;
             wall_instance.constructor([currentX, currentY],[this.width, this.width],[j, i]);

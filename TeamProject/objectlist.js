@@ -160,7 +160,7 @@ function ObjectList(){
         var collider = false;
         collider = false;
         for(var wall_index=0; wall_index<this.wall_list.length; wall_index++)
-        {   
+        {
             //[width, width]는 벽돌의 크기가 제각기 다를 때 변형
             if(CircleCollider(this.player, this.wall_list[wall_index]))
             {
@@ -171,7 +171,7 @@ function ObjectList(){
         {
             //[width, width]는 벽돌의 크기가 제각기 다를 때 변형
             if(CircleCollider(this.player, this.enemy_list[enemy_index]))
-            {   
+            {
                 collider=true;
             }
         }
@@ -222,6 +222,7 @@ function ObjectList(){
         else if(target.tag==4)
         {
             console.log("gameover");
+            console.log("commandCenter Broken");
             this.over=true;
         }
         else if(target.tag==1)
