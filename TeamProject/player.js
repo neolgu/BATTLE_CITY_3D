@@ -56,8 +56,8 @@ function Player(){
   }
   this.damaged = function()
   {
-      this.health-=1;
-      if(this.health<0)
+      this.health = this.health -1;
+      if(this.health<=0)
       {
         return 0;
       }

@@ -31,11 +31,7 @@ class UIManager {
                 this.nowUI = this.reloadUIClass(arr[0]);
                 return Number(arr[1]); // 스테이지 번호 리턴
             }
-            else if (arr.length == 2 && arr[0] == "Stage") { // 게임에서 복귀
-                // clear ui canvas
-                this.ctx.clearRect(0, 0, this.canvas.clientWidth, this.canvas.clientHeight);
-                // change UI class
-                this.nowUI = this.reloadUIClass(arr[0]);
+            else if (arr.length == 2 && arr[0] == "End") { // 게임에서 복귀
                 return -1;
             }
         }
@@ -138,9 +134,9 @@ class GameUI {
 
         this.initSprite();
 
-        this.score = 300;
-        this.numEnemy = 10;
-        this.hp = 2;
+        this.score = 0;
+        this.stage = 0;
+        this.player = 3;
 
         this.pause = false;
         this.animationFlag = false;
@@ -151,10 +147,10 @@ class GameUI {
         this.execuse();
     }
 
-    initData(score, enemy, hp) {
+    initData(score, stage, player) {
         this.score = score;
-        this.numEnemy = enemy;
-        this.hp = hp;
+        this.stage = stage;
+        this.player = player;
     }
 
     initSprite() {
@@ -210,14 +206,19 @@ class GameUI {
     drawHP() {
         this.ctx.font = "30px PressStart";
         this.ctx.fillText("HP", 730, 150);
-        this.ctx.drawImage(this.heart[this.hp], 710, 160);
+        if (!isNaN(this.player.health)){
+            var hp = this.player.health;
+            if (hp < 0)
+                hp = 0;
+            this.ctx.drawImage(this.heart[hp], 710, 160);
+        }
     }
 
     drawEnemy() {
         this.ctx.font = "30px PressStart";
         this.ctx.fillText("Enemy", 730, 270);
         this.ctx.drawImage(this.enemySprite, 730, 290, 40, 40);
-        this.ctx.fillText("X" + this.numEnemy, 780, 325);
+        this.ctx.fillText("X" + this.stage.enemy_num, 780, 325);
     }
 
     drawPause() {
@@ -225,20 +226,21 @@ class GameUI {
         this.ctx.fillRect(10, 10, 700, 700);
         this.ctx.fillStyle = 'rgb(255, 255, 255)';
         this.ctx.font = "50px PressStart";
-        this.ctx.fillText("PAUSE", 240, 300);
+        this.ctx.fillText("GO TO MAIN?", 100, 300);
         this.ctx.font = "20px PressStart";
-        this.ctx.fillText("(ESC: Cancle, Enter: Stage)", 100, 400);
+        this.ctx.fillText("(ESC: Cancle, Enter: Main)", 100, 400);
     }
 
     keyFunc(key) {
         var result = null;
         switch (key) {
             case "Escape":
-                this.escFlag = !this.escFlag;
+                if(this.stage != -1)
+                    this.escFlag = !this.escFlag;
                 break;
             case "Enter":
                 if (this.escFlag) {
-                    result = "Stage" + ",-1";
+                    result = "End" + ",-1";
                     this.stop();
                 }
                 break;

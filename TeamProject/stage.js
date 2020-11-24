@@ -21,8 +21,8 @@ function Stage()
     {
       this.obj_list.over = false;
       this.map = map.slice();
-      this.enemy_num = enemy_num;
-      console.log(enemy_num);
+      this.enemy_num = new Number(enemy_num);
+      // console.log(enemy_num);
       
       this.width = 2/Math.sqrt(map.length);
       this.half = this.width/2;
@@ -126,7 +126,7 @@ function Stage()
             wall_instance.index=this.obj_indexer++;
             wall_instance.constructor([currentX, currentY],[this.width, this.width],[j, i]);
             wall_instance.health=3;
-            console.log(wall_instance.center);
+            // console.log(wall_instance.center);
             this.obj_list.commandCenter = wall_instance;
           }
         }

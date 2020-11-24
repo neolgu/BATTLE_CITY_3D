@@ -21,7 +21,9 @@ class Manager {
                 this.gmmgr.stage_loader(result-1);
 
                 if(this.uimgr.nowUI instanceof GameUI){
-                  //this.uimgr.nowUI.initData(s, this.gmmgr.stage_list, hp);
+                  this.uimgr.nowUI.initData(500, 
+                    this.gmmgr.currentStage,
+                    this.gmmgr.obj_list.player);
                 }
 
                 // minimap load
@@ -32,9 +34,10 @@ class Manager {
                 this.graphicmgr.dataBind(this.gmmgr.obj_list);
                 this.graphicmgr.execuse();
             }
-            if(result == -1){//all stop.
+            if(result == -1){//all stop and reload
               this.minimap.stop();
               this.graphicmgr.stop();
+              window.location.reload();
             }
         }
         //game.keyEvent(e);
