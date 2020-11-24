@@ -8,6 +8,7 @@ function ObjectList(){
     this.garbage_list =[];
     this.commandCenter = 1;
     this.over=false;
+    this.frame_score = 0;
     this.initializer = function()
     {
         this.player = -1;
@@ -40,6 +41,8 @@ function ObjectList(){
                         {
                             code = 3;//wall code
                             result_index=wall_index;//get index
+                            if(this.bullet_list[bullet_index].team)
+                              this.frame_score+=30;
                         }
                         else
                             code = -2;//exception
