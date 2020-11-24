@@ -21,7 +21,7 @@ class Manager {
         this.gmmgr.stage_loader(result - 1);
 
         if (this.uimgr.nowUI instanceof GameUI) {
-          this.uimgr.nowUI.initData(500,
+          this.uimgr.nowUI.initData(
             this.gmmgr.currentStage,
             this.gmmgr.obj_list.player,
             this.gmmgr);

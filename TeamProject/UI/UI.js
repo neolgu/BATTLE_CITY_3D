@@ -140,8 +140,7 @@ class GameUI {
         this.drawbackground();
     }
 
-    initData(score, stage, player, gm) {
-        this.score = score;
+    initData(stage, player, gm) {
         this.stage = stage;
         this.player = player;
         this.gm = gm;
@@ -174,7 +173,6 @@ class GameUI {
         this.drawScore();
         this.drawHP();
         this.drawEnemy();
-        console.log(this.gm.currentState);
 
         if (this.escFlag) {
             this.drawPause();
@@ -198,7 +196,7 @@ class GameUI {
         this.ctx.fillStyle = 'rgb(255, 255, 255)';
         this.ctx.font = "30px PressStart";
         this.ctx.fillText("SCORE", 730, 50);
-        this.ctx.fillText(String(this.score), 730, 80);
+        this.ctx.fillText(String(this.gm.currentStage.score), 730, 80);
     }
 
     drawHP() {
@@ -236,15 +234,19 @@ class GameUI {
 
         if(this.gm.currentState == 1){
             this.ctx.font = "50px PressStart";
-            this.ctx.fillText("WIN", 100, 300);
+            this.ctx.fillText("WIN", 250, 300);
             this.ctx.font = "20px PressStart";
-            this.ctx.fillText("PRESS ENTER", 100, 400);
+            this.ctx.fillText("PRESS ENTER", 250, 400);
+            this.ctx.font = "30px PressStart";
+            this.ctx.fillText("SCORE:" + String(this.gm.currentStage.score), 250, 350);
         }
         else if(this.gm.currentState == -1){
             this.ctx.font = "50px PressStart";
-            this.ctx.fillText("LOSS", 100, 300);
+            this.ctx.fillText("LOSS", 250, 300);
             this.ctx.font = "20px PressStart";
-            this.ctx.fillText("PRESS ENTER", 100, 400);
+            this.ctx.fillText("PRESS ENTER", 250, 400);
+            this.ctx.font = "30px PressStart";
+            this.ctx.fillText("SCORE:" + String(this.gm.currentStage.score), 250, 350);
         }
     }
 
