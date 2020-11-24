@@ -16,6 +16,7 @@ function Stage()
     this.width = 0;
     this.half = 0;
     this.tankSize = 0;
+    this.enemy_score = 100;
 
 
     this.generator = function(map, enemy_num)
@@ -47,22 +48,22 @@ function Stage()
       //프레임 별 수행해야 할 동작
       if(this.enemy_num>0 && this.obj_list.enemy_list.length < this.initial_enemy_num)
       {
-        this.score+=100;
+        this.score+=this.enemy_score;
         this.spawn();
       }
-
-      this.obj_list.frameWork();
-      this.score += this.obj_list.frame_score;
       else if(this.enemy_num==0 && this.obj_list.enemy_list.length==0)
       {
         if(this.manager!=null)
         {
+          this.score+=this.enemy_score;
           console.log("게임 승리");
           this.manager(1);
           this.stop();
         }
       }
 
+      this.obj_list.frameWork();
+      this.score += this.obj_list.frame_score;
       this.obj_list.frame_score=0;
       console.log(this.score);
       for(var i=0;i<this.obj_list.wall_list.length;i++)
