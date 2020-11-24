@@ -27,6 +27,8 @@ class MiniMapManager {
 
     draw(t) {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.ctx.fillStyle = 'rgb(50, 50, 50)';
+        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
         //draw background
         this.ctx.beginPath();
@@ -37,13 +39,17 @@ class MiniMapManager {
 
         // // Enemy
         for (var i = 0; i < this.mapdata.enemy_list.length; i++) {
-            this.drawObj(this.mapdata.enemy_list[i].x_pos, this.mapdata.enemy_list[i].y_pos, "E");
+            if(this.mapdata.enemy_list[i] != null)
+                this.drawObj(this.mapdata.enemy_list[i].x_pos, this.mapdata.enemy_list[i].y_pos, "E");
         }
 
         // // Wall
         for (var i = 0; i < this.mapdata.wall_list.length; i++) {
-            this.drawObj(this.mapdata.wall_list[i].x_pos, this.mapdata.wall_list[i].y_pos, "W");
+            if(this.mapdata.wall_list[i] != null)
+                this.drawObj(this.mapdata.wall_list[i].x_pos, this.mapdata.wall_list[i].y_pos, "W");
         }
+
+        this.drawObj(this.mapdata.commandCenter.x_pos, this.mapdata.commandCenter.y_pos, "T");
 
         if (this.animationFlag) {
             requestAnimationFrame(this.draw.bind(this));

@@ -12,7 +12,7 @@ function Wall()
   this.shape = [];
   this.scale =0;
   this.health = 1;
-
+  
   //normalized vector
   this.vertex=new Float32Array([
       -0.5, 0.5,

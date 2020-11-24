@@ -8,8 +8,8 @@ function ObjectList(){
     this.garbage_list =[];
     this.commandCenter = 1;
     this.over=false;
-    this.frame_score = 0;
-    this.wall_score = 30;
+    this.frameScore = 0;
+    this.wallScore=30;
     this.initializer = function()
     {
         this.player = -1;
@@ -27,13 +27,17 @@ function ObjectList(){
         //bullet_list가 수행해야 하는 search
         for(var bullet_index=0; bullet_index<this.bullet_list.length; bullet_index++)
         {
+            if(this.bullet_list[bullet_index]==null)
+                continue;
             this.bullet_list[bullet_index].frameWork();
             var center = this.bullet_list[bullet_index].center;
             var r = this.bullet_list[bullet_index].shape[0]/2;
             if(code==-1)
             {
                 for(var wall_index=0; wall_index<this.wall_list.length; wall_index++)
-                {
+                {   
+                    if(this.wall_list[wall_index]==null)
+                        continue;
                     //충돌검사 + etc
                     var standard = (r/2) + (this.wall_list[wall_index].shape[0]/2)
                     if(getDistance(center, this.wall_list[wall_index].center)<standard)
@@ -43,7 +47,9 @@ function ObjectList(){
                             code = 3;//wall code
                             result_index=wall_index;//get index
                             if(this.bullet_list[bullet_index].team)
-                              this.frame_score+=this.wall_score;
+                            {
+                                this.frameScore+=this.wallScore;
+                            }
                         }
                         else
                             code = -2;//exception
@@ -56,7 +62,9 @@ function ObjectList(){
             {
 
                 for(var enemy_index=0; enemy_index<this.enemy_list.length; enemy_index++)
-                {
+                {   
+                    if(this.enemy_list[enemy_index]==null)
+                        continue;
                     //충돌검사 + etc
                     var standard = (r/2) + (this.enemy_list[enemy_index].shape[0]/2)
                     if(this.bullet_list[bullet_index].team&&getDistance(center, this.enemy_list[enemy_index].center)<standard)
@@ -71,7 +79,6 @@ function ObjectList(){
             {
                 if(this.player!=-1)
                 {
-                    console.log(this.player.health);
                     var standard = (r/2) + (this.player.shape[0]/2);
                     if(getDistance(center, this.player.center)<standard && !this.bullet_list[bullet_index].team)
                     {
@@ -85,7 +92,6 @@ function ObjectList(){
                 var standard = (r/2) + (this.commandCenter.shape[0]/2);
                 if(getDistance(center, this.commandCenter.center)<standard)
                 {
-                    console.log("Com");
                     var isLive = this.commandCenter.damaged();
                     if(!isLive)
                     {
@@ -111,11 +117,15 @@ function ObjectList(){
     {
         for(var enemy_index=0; enemy_index<this.enemy_list.length; enemy_index++)
         {
+            if(this.enemy_list[enemy_index]==null)
+                        continue;
             //enemy_list가 수행해야 하는 search
             var ray = false;
 
             for(var wall_index=0; wall_index<this.wall_list.length; wall_index++)
             {
+                if(this.wall_list[wall_index]==null)
+                        continue;
                 var standard = (this.wall_list[wall_index].shape[0]/2) + (this.enemy_list[enemy_index].shape[0]/2)
                 ray = check_ray(this.enemy_list[enemy_index], this.wall_list[wall_index], this.enemy_list[enemy_index].predict_sight, this.wall_list[wall_index].shape[0]);
                 if(ray)
@@ -133,6 +143,8 @@ function ObjectList(){
             {
                 for(var enemy_index2 =0 ; enemy_index2<this.enemy_list.length; enemy_index2++)
                 {
+                    if(this.enemy_list[enemy_index2]==null)
+                        continue;
                     if(enemy_index==enemy_index2)
                         continue;
                     var standard = this.enemy_list[enemy_index].shape[0]
@@ -164,7 +176,9 @@ function ObjectList(){
         var collider = false;
         collider = false;
         for(var wall_index=0; wall_index<this.wall_list.length; wall_index++)
-        {
+        {   
+            if(this.wall_list[wall_index]==null)
+                        continue;
             //[width, width]는 벽돌의 크기가 제각기 다를 때 변형
             if(CircleCollider(this.player, this.wall_list[wall_index]))
             {
@@ -173,9 +187,11 @@ function ObjectList(){
         }
         for(var enemy_index=0; enemy_index<this.enemy_list.length; enemy_index++)
         {
+            if(this.enemy_list[enemy_index]==null)
+                continue;
             //[width, width]는 벽돌의 크기가 제각기 다를 때 변형
             if(CircleCollider(this.player, this.enemy_list[enemy_index]))
-            {
+            {   
                 collider=true;
             }
         }
@@ -213,20 +229,19 @@ function ObjectList(){
     {
         if(target.tag==3)
         {
-            this.wall_list.splice(target.idx, 1);
+            this.wall_list[target.idx]=null;//.splice(target.idx, 1);
         }
         else if(target.tag==5)
         {
-            this.bullet_list.splice(target.idx, 1);
+            this.bullet_list[target.idx]=null;//.splice(target.idx, 1);
         }
         else if(target.tag==2)
         {
-            this.enemy_list.splice(target.idx, 1);
+            this.enemy_list[target.idx]=null;//.splice(target.idx, 1);
         }
         else if(target.tag==4)
         {
             console.log("gameover");
-            console.log("commandCenter Broken");
             this.over=true;
         }
         else if(target.tag==1)

@@ -46,6 +46,10 @@ function Stage()
       if(this.obj_list.over)
         this.over();
       //프레임 별 수행해야 할 동작
+      this.obj_list.frameWork();
+      this.score += this.obj_list.frameScore;
+      console.log(this.score);
+      this.obj_list.frameScore=0;
       if(this.enemy_num>0 && this.obj_list.enemy_list.length < this.initial_enemy_num)
       {
         this.score+=this.enemy_score;
@@ -62,16 +66,16 @@ function Stage()
         }
       }
 
-      this.obj_list.frameWork();
-      this.score += this.obj_list.frame_score;
-      this.obj_list.frame_score=0;
-      console.log(this.score);
+
+    
       for(var i=0;i<this.obj_list.wall_list.length;i++)
       {
 
       }
       for(var enemy_index=0;enemy_index<this.obj_list.enemy_list.length;enemy_index++)
       {
+        if(this.obj_list.enemy_list[enemy_index]==null)
+          continue;
         this.coordRefactor(this.obj_list.enemy_list[enemy_index]);
         this.obj_list.enemy_list[enemy_index].ai_action();
       }
